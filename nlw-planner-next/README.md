@@ -55,7 +55,7 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [X] Trip schema
 - [X] Create user dto
 - [X] Create trip dto
-- [ ] Create trip form
+- [X] Create trip form
 - [ ] Create user form
 - [ ] User Services - Register User
 - [ ] Database Service - Save User

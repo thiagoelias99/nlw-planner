@@ -5,6 +5,8 @@ import { useState } from 'react'
 import GuestsEmailsInput, { GuestEmailsInputFormValues } from '../form-fields/guests-emails-input'
 import { CreateTripDto } from '@/dto/create-trip-dto'
 import OwnerEmailInput, { OwnerEmailInputFormValues } from '../form-fields/owner-email-input'
+import { useRouter } from 'next/navigation'
+import { useToast } from '../ui/use-toast'
 
 export default function CreateTripForm() {
   const [createTripDto, setCreateTripDto] = useState<CreateTripDto>({
@@ -17,6 +19,8 @@ export default function CreateTripForm() {
   const [formStep, setFormStep] = useState<'first' | 'second'>('first')
   const [openOwnerEmailInput, setOpenOwnerEmailInput] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter()
+  const { toast } = useToast()
 
   function step1Submit(data: DestinationAndDateInputsFormValues) {
     setCreateTripDto((prev) => ({
@@ -26,7 +30,6 @@ export default function CreateTripForm() {
       endDate: data.endsAt,
     }))
 
-    console.log('step1Submit')
     setFormStep('second')
   }
 
@@ -42,17 +45,22 @@ export default function CreateTripForm() {
       ...createTripDto,
       ownerEmail: data.email,
     }
-
     setCreateTripDto(completeData)
-    console.log(completeData)
-
     setIsSubmitting(true)
-    
     await new Promise((resolve) => setTimeout(resolve, 2000))
-
     setIsSubmitting(false)
+    setOpenOwnerEmailInput(false)
 
-    console.log('emailSubmit')
+    const isUserAlreadyRegistered = false
+
+    if (!isUserAlreadyRegistered) {
+      router.push('/register?email=' + data.email)
+    } else {
+      toast({
+        title: 'Viagem criada com sucesso!',
+        description: 'Verifique seu email para continuar',
+      })
+    }
   }
 
   return (
@@ -60,11 +68,7 @@ export default function CreateTripForm() {
       <DestinationAndDateInputs
         onSubmit={step1Submit}
         disabled={formStep === 'second'}
-        onBack={() => {
-          setFormStep('first')
-          console.log(formStep)
-          console.log('back')
-        }}
+        onBack={() => { setFormStep('first') }}
       />
       {formStep === 'second' && (
         <GuestsEmailsInput
@@ -78,6 +82,7 @@ export default function CreateTripForm() {
         onOpenChange={setOpenOwnerEmailInput}
         onSubmit={emailSubmit}
         isSubmitting={isSubmitting}
+        destination={createTripDto.destination}
       />
     </div>
   )

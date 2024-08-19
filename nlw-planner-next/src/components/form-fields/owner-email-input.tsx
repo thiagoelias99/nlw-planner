@@ -19,9 +19,10 @@ interface OwnerEmailInputProps {
   onOpenChange: Dispatch<SetStateAction<boolean>>
   onSubmit: (values: OwnerEmailInputFormValues) => void
   isSubmitting: boolean
+  destination: string
 }
 
-export default function OwnerEmailInput({ open, onOpenChange, onSubmit, isSubmitting }: OwnerEmailInputProps) {
+export default function OwnerEmailInput({ open, onOpenChange, onSubmit, isSubmitting, destination }: OwnerEmailInputProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,7 +39,7 @@ export default function OwnerEmailInput({ open, onOpenChange, onSubmit, isSubmit
         <DialogHeader>
           <DialogTitle>Confirmar criação da viagem</DialogTitle>
           <DialogDescription>
-            Para concluir a criação da viagem para <strong className='text-foreground'>Floripa</strong>, preencha seus dados abaixo:
+            Para concluir a criação da viagem para <strong className='text-foreground'>{destination}</strong>, preencha seus dados abaixo:
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
