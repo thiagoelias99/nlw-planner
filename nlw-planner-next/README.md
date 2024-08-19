@@ -51,10 +51,12 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 
 ### ROADMAP
 #### [ ] Create Trip
-- [ ] User schema
-- [ ] Trip schema
-- [ ] Create trip dto
+- [X] User schema
+- [X] Trip schema
+- [X] Create user dto
+- [X] Create trip dto
 - [ ] Create trip form
+- [ ] Create user form
 - [ ] User Services - Register User
 - [ ] Database Service - Save User
 - [ ] Email Service - Send Register User Email
