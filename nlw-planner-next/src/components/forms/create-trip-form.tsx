@@ -54,7 +54,7 @@ export default function CreateTripForm() {
     const isUserAlreadyRegistered = false
 
     if (!isUserAlreadyRegistered) {
-      router.push('/register?email=' + data.email)
+      router.push('/registro?email=' + data.email)
     } else {
       toast({
         title: 'Viagem criada com sucesso!',
