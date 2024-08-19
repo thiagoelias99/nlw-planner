@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/toaster'
+import LoginHeader from '@/components/login-header'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,10 +21,11 @@ export default function RootLayout({
     <html lang="pt-BR" className='dark'>
       <body className={cn('min-h-screen bg-background font-sans antialiased', inter.className)}
       >
-        <>
+        <div>
+          <LoginHeader />
           {children}
           <Toaster />
-        </>
+        </div>
       </body>
     </html>
   )

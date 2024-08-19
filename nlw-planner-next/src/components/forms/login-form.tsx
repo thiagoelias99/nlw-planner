@@ -19,18 +19,14 @@ import { useState } from 'react'
 import { useToast } from '../ui/use-toast'
 
 const formSchema = z.object({
-  firstName: z.string().min(2).max(50),
-  lastName: z.string().min(2).max(50),
-  email: z.string().email(),
+  email: z.string().email()
 })
 
-export default function RegisterUserForm() {
+export default function LoginForm() {
   const searchParams = useSearchParams()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
       email: searchParams.get('email') ?? '',
     },
   })
@@ -41,7 +37,7 @@ export default function RegisterUserForm() {
     setIsSubmitting(true)
     await new Promise((resolve) => setTimeout(resolve, 2000))
     setIsSubmitting(false)
-    form.reset()
+
     form.setValue('email', '')
 
     console.log(values)
@@ -66,41 +62,6 @@ export default function RegisterUserForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}
           className="w-full flex flex-col gap-4 bg-card p-4 rounded-xl shadow-shape">
-          <div className='contents md:flex gap-4'>
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <InputWithLeadingIcon
-                      {...field}
-                      Icon={UserIcon}
-                      placeholder="Primeiro Nome"
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <InputWithLeadingIcon
-                      {...field}
-                      placeholder="Sobrenome"
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
           <FormField
             control={form.control}
             name="email"
