@@ -62,7 +62,7 @@ export default function RegisterUserForm() {
   }
 
   return (
-    <div className='w-full space-y-4 md:max-w-md mx-auto'>
+    <div className='w-full'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}
           className="w-full flex flex-col gap-4 bg-card p-4 rounded-xl shadow-shape">
