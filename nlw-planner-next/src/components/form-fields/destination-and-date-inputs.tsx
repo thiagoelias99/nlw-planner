@@ -90,7 +90,7 @@ export default function DestinationAndDateInputs({ disabled, onSubmit, onBack }:
                       <Button
                         disabled={disabled}
                         className={cn(
-                          'w-full flex flex-row justify-start items-center px-0 gap-4 text-foreground bg-transparent hover:bg-transparent text-lg disabled:opacity-100 disabled:cursor-not-allowed',)}
+                          'w-full flex flex-row justify-start items-center px-0 gap-4 text-foreground bg-transparent hover:bg-transparent text-lg disabled:opacity-100 disabled:cursor-not-allowed font-normal',)}
                       >
                         <CalendarIcon className="text-muted-foreground" />
                         {date?.from ? (

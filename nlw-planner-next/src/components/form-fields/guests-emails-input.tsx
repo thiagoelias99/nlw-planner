@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Input } from '../ui/input'
-import { UserRoundPlusIcon, XIcon, AtSignIcon, PlusIcon } from 'lucide-react'
+import { UserRoundPlusIcon, XIcon, AtSignIcon, PlusIcon, ArrowRightIcon } from 'lucide-react'
 import Divider from '../ui/divider'
 import { Button } from '../ui/button'
 import { z } from '@/lib/pt-zod'
@@ -21,9 +21,10 @@ export type GuestEmailsInputFormValues = z.infer<typeof formSchema>
 interface GuestEmailsInputProps {
   onSubmit: (values: GuestEmailsInputFormValues[]) => void
   guestsEmails: GuestEmailsInputFormValues[]
+  confirmAction: () => void
 }
 
-export default function GuestsEmailsInput({ onSubmit: parentOnSubmit, guestsEmails }: GuestEmailsInputProps) {
+export default function GuestsEmailsInput({ onSubmit: parentOnSubmit, guestsEmails, confirmAction }: GuestEmailsInputProps) {
   const [guestEmails, setGuestEmails] = useState<GuestEmailsInputFormValues[]>(guestsEmails)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,15 +55,26 @@ export default function GuestsEmailsInput({ onSubmit: parentOnSubmit, guestsEmai
   return (
     <div className='bg-card rounded-xl shadow-shape w-full pl-6 pr-4 py-5'>
       <Dialog>
-        <DialogTrigger asChild>
-          <Button className='bg-transparent hover:bg-transparent text-muted-foreground text-lg flex flex-row justify-start items-center gap-4 font-normal px-1'>
-            <UserRoundPlusIcon size={18} />
-            {guestEmails.length === 0 ? (
-              <span>Quem estará na viagem?</span>) : (
-              <span>{guestEmails.length} pessoa(s) convidada(s)</span>
-            )}
+
+        <div className='w-full flex flex-col md:flex-row gap-4'>
+          <DialogTrigger asChild>
+            <Button className='w-full bg-transparent hover:bg-transparent text-muted-foreground text-lg flex flex-row justify-start items-center gap-4 font-normal px-1'>
+              <UserRoundPlusIcon size={18} />
+              {guestEmails.length === 0 ? (
+                <span>Quem estará na viagem?</span>) : (
+                <span>{guestEmails.length} pessoa(s) convidada(s)</span>
+              )}
+            </Button>
+          </DialogTrigger>
+          <Button
+            type='button'
+            onClick={confirmAction}
+          >
+            <span>Confirmar Viagem</span>
+            <ArrowRightIcon size={18} />
           </Button>
-        </DialogTrigger>
+        </div>
+
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Selecionar convidados</DialogTitle>
@@ -70,7 +82,6 @@ export default function GuestsEmailsInput({ onSubmit: parentOnSubmit, guestsEmai
               Os convidados irão receber e-mails para confirmar a participação na viagem.
             </DialogDescription>
           </DialogHeader>
-
           <div className='w-full flex justify-start items-center flex-wrap gap-2'>
             {guestEmails.map((guest, index) => (
               <div key={index} className='bg-popover text-popover-foreground flex px-2.5 py-1.5 justify-start items-center gap-2.5 rounded-md'>
@@ -131,7 +142,7 @@ export default function GuestsEmailsInput({ onSubmit: parentOnSubmit, guestsEmai
                 />
 
                 <Button
-                  type='submit'
+                  type='button'
                   className='w-full'
                 >
                   <p>Convidar</p>
