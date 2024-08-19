@@ -1,5 +1,9 @@
+import CreateTripForm from '@/components/forms/create-trip-form'
+
 export default function Home() {
   return (
-    <main></main>
+    <main>
+      <CreateTripForm />
+    </main>
   )
 }
