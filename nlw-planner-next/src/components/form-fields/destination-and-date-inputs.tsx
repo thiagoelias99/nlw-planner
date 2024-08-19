@@ -12,8 +12,6 @@ import { ptBR } from 'date-fns/locale'
 import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { format } from 'date-fns'
-import { Card } from '../ui/card'
-
 
 interface DestinationAndDateInputsProps {
   form: UseFormReturn<any>
@@ -21,11 +19,12 @@ interface DestinationAndDateInputsProps {
   startAtInputName: string
   endsAtInputName: string
   disabled?: boolean
+  onContinue?: () => void
+  onBack?: () => void
 }
 
-export default function DestinationAndDateInputs({ form, destinationInputName, startAtInputName, endsAtInputName, disabled }: DestinationAndDateInputsProps) {
+export default function DestinationAndDateInputs({ form, destinationInputName, startAtInputName, endsAtInputName, disabled, onContinue, onBack }: DestinationAndDateInputsProps) {
   const [date, setDate] = useState<DateRange | undefined>(undefined)
-  const showPart2 = false
 
   useEffect(() => {
     if (date?.from && date?.to) {
@@ -36,7 +35,7 @@ export default function DestinationAndDateInputs({ form, destinationInputName, s
   }, [date])
 
   return (
-    <div className='bg-card w-full pl-6 pr-4 py-5 flex flex-col gap-2 rounded-xl'>
+    <div className='bg-card w-full pl-6 pr-4 py-5 flex flex-col gap-2 rounded-xl shadow-shape'>
       <FormField
         control={form.control}
         name={destinationInputName}
@@ -98,11 +97,11 @@ export default function DestinationAndDateInputs({ form, destinationInputName, s
           </FormItem>
         )}
       />
-      {!showPart2 ? (
+      {!disabled ? (
         <Button
           type='button'
           className='w-full space-x-2'
-        // onClick={() => setShowPart2(true)}
+          onClick={onContinue}
         >
           <span>Continuar</span>
           <ArrowRightIcon size={18} />
@@ -111,7 +110,7 @@ export default function DestinationAndDateInputs({ form, destinationInputName, s
         <Button
           type='button'
           variant='secondary'
-        // onClick={() => setShowPart2(false)}
+          onClick={onBack}
         >
           <span>Alterar local/data</span>
           <Settings2Icon size={18} />

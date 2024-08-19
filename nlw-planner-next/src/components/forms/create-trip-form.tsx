@@ -3,12 +3,11 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Input } from 'postcss'
+import { Form } from '../ui/form'
 import DestinationAndDateInputs from '../form-fields/destination-and-date-inputs'
 import { Button } from '@/components/ui/button'
 import { z } from '@/lib/pt-zod'
-
+import { useEffect, useState } from 'react'
 
 const formSchema = z.object({
   ownerEmail: z.string().email(),
@@ -32,6 +31,8 @@ const formSchema = z.object({
 
 
 export default function CreateTripForm() {
+  const [formStep, setFormStep] = useState<'first' | 'second'>('first')
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,17 +48,34 @@ export default function CreateTripForm() {
     console.log(values)
   }
 
+  function handleStep1Continue() {
+    form.trigger()
+  }
+
+  function handleStep1Back() {
+    setFormStep('first')
+  }
+
+
+  useEffect(() => {
+    if (form.getValues('destination') && form.getValues('endsAt')) {
+      setFormStep('second')
+    }
+  }, [form.getValues('destination'), form.getValues('endsAt')])
+
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
         <DestinationAndDateInputs
           form={form}
           destinationInputName="destination"
           startAtInputName="startAt"
           endsAtInputName="endsAt"
+          disabled={formStep === 'second'}
+          onContinue={handleStep1Continue}
+          onBack={handleStep1Back}
         />
-        <Button type="submit">Submit</Button>
       </form>
     </Form>
   )
