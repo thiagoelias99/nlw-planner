@@ -1,5 +1,5 @@
 import { CreateTripDto } from '@/dto/create-trip-dto'
-import { getUserByEmail, getUserById, saveTripAction, updateUserConfirmationToken } from './actions/database/save-trip-action'
+import { getUserByEmail, getUserById, saveTripAction, saveUserAction, updateUserConfirmationToken } from './actions/database/save-trip-action'
 
 
 export interface IDatabaseServices {
@@ -7,6 +7,7 @@ export interface IDatabaseServices {
   getUserByEmail(email: string): Promise<User | null>
   getUserById(id: string): Promise<User | null>
   updateUserConfirmationToken(id: string, confirmationToken: string): Promise<void>
+  createUser(dto: CreateUserDto, confirmationToken: string): Promise<User>
 }
 
 export class DatabaseServices implements IDatabaseServices {
@@ -63,7 +64,20 @@ export class DatabaseServices implements IDatabaseServices {
 
   async updateUserConfirmationToken(id: string, confirmationToken: string) {
     await updateUserConfirmationToken(id, confirmationToken)
-
     return
+  }
+
+  async createUser(dto: CreateUserDto, confirmationToken: string): Promise<User>{
+    const createdUser = await saveUserAction(dto, confirmationToken)
+    
+    return {
+      id: createdUser.id,
+      firstName: createdUser.firstName,
+      lastName: createdUser.lastName,
+      email: createdUser.email,
+      isEmailVerified: createdUser.isEmailVerified,
+      ownedTrips: [],
+      invites: []
+    }
   }
 }

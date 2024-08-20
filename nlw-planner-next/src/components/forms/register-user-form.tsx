@@ -3,7 +3,7 @@
 import { z } from '@/lib/pt-zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -17,6 +17,7 @@ import InputWithLeadingIcon from '../form-fields/Input-with-leading-icon'
 import { MailIcon, UserIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useToast } from '../ui/use-toast'
+import { UserServices } from '@/services/user-services'
 
 const formSchema = z.object({
   firstName: z.string().min(2).max(50),
@@ -25,6 +26,8 @@ const formSchema = z.object({
 })
 
 export default function RegisterUserForm() {
+  const usersServices = UserServices.getInstance()
+
   const searchParams = useSearchParams()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -36,28 +39,32 @@ export default function RegisterUserForm() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsSubmitting(false)
-    form.reset()
-    form.setValue('email', '')
 
-    console.log(values)
+    try {
+      const userId = await usersServices.createUser(values)
 
-    const isRegisterSuccess = true
-    if (isRegisterSuccess) {
+      form.reset()
+      form.setValue('email', '')
+
       toast({
         title: 'Cadastro realizado com sucesso!',
         description: 'Verifique seu email para continuar',
       })
-    } else {
+      setIsSubmitting(false)
+      router.push('/verificar-token?id=' + userId)
+    } catch (error) {
+      console.error(error)
       toast({
         title: 'Erro ao cadastrar',
         description: 'Tente novamente mais tarde',
         variant: 'destructive',
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 

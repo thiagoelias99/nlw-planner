@@ -50,3 +50,21 @@ export async function updateUserConfirmationToken(id: string, confirmationToken:
     }
   })
 }
+export async function saveUserAction(dto: CreateUserDto, confirmationToken: string) {
+  return prisma.user.upsert({
+    where: {
+      email: dto.email
+    },
+    update: {
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      confirmationToken
+    },
+    create: {
+      email: dto.email,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      confirmationToken
+    }
+  })
+}

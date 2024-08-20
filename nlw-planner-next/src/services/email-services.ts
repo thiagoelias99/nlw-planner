@@ -2,7 +2,8 @@ import { CreateTripDto } from '@/dto/create-trip-dto'
 
 export interface IEmailServices {
   sendTripCreatedEmail(dto: CreateTripDto, tripId: string, confirmationToken: string): Promise<void>
-  sendUserConfirmationTokenEmail(user: User, confirmationToken: string): Promise<void>
+  sendUserLoginConfirmationTokenEmail(user: User, confirmationToken: string): Promise<void>
+  sendUserRegisterConfirmationTokenEmail(user: User, confirmationToken: string): Promise<void>
 }
 
 export class EmailServices implements IEmailServices {
@@ -15,6 +16,7 @@ export class EmailServices implements IEmailServices {
     return EmailServices.instance
   }
 
+  //Send trip information email to the owner with confirmation token
   async sendTripCreatedEmail(dto: CreateTripDto, tripId: string, confirmationToken: string) {
     console.log('Sending trip created email:', dto.ownerEmail, tripId)
 
@@ -22,7 +24,16 @@ export class EmailServices implements IEmailServices {
     //TODO: Implement this function
   }
 
-  async sendUserConfirmationTokenEmail(user: User, confirmationToken: string) {
+  //Send user login confirmation token email
+  async sendUserLoginConfirmationTokenEmail(user: User, confirmationToken: string) {
+    console.log('Sending user confirmation token email:', user.email, confirmationToken)
+
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    //TODO: Implement this function
+  }
+
+  //Send user register confirmation token email
+  async sendUserRegisterConfirmationTokenEmail(user: User, confirmationToken: string) {
     console.log('Sending user confirmation token email:', user.email, confirmationToken)
 
     await new Promise(resolve => setTimeout(resolve, 2000))
