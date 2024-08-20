@@ -23,3 +23,30 @@ export async function saveTripAction(dto: CreateTripDto, confirmationToken: stri
     }
   })
 }
+
+export async function getUserByEmail(email: string) {
+  return prisma.user.findUnique({
+    where: {
+      email
+    }
+  })
+}
+
+export async function getUserById(id: string) {
+  return prisma.user.findUnique({
+    where: {
+      id
+    }
+  })
+}
+
+export async function updateUserConfirmationToken(id: string, confirmationToken: string) {
+  return prisma.user.update({
+    where: {
+      id
+    },
+    data: {
+      confirmationToken
+    }
+  })
+}

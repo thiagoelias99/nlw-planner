@@ -2,6 +2,7 @@ import { CreateTripDto } from '@/dto/create-trip-dto'
 import { IUserServices, UserServices } from './user-services'
 import { EmailServices, IEmailServices } from './email-services'
 import { DatabaseServices, IDatabaseServices } from './database-services'
+import { createConfirmationToken } from '@/lib/utils'
 
 export interface ITripServices {
   createTrip(dto: CreateTripDto): Promise<{
@@ -35,8 +36,8 @@ export class TripServices {
     isEmailVerified: boolean
   }> {
 
-    //Create a random confirmation token with 6 numeric digits
-    const confirmationToken = Math.floor(100000 + Math.random() * 900000).toString()
+
+    const confirmationToken = createConfirmationToken()
 
     const tripId = await this.databaseServices.saveTrip(dto, confirmationToken)
     const isEmailVerified = await this.userServices.checkIfEmailIsVerified(dto.ownerEmail)

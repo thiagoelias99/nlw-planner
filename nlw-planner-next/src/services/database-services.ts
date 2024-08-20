@@ -1,11 +1,12 @@
 import { CreateTripDto } from '@/dto/create-trip-dto'
-import { USER_MOCK } from '@/lib/mocks'
-import { saveTripAction } from './actions/database/save-trip-action'
+import { getUserByEmail, getUserById, saveTripAction, updateUserConfirmationToken } from './actions/database/save-trip-action'
 
 
 export interface IDatabaseServices {
   saveTrip(dto: CreateTripDto, confirmationToken: string): Promise<string>
-  getUserByEmail(email: string): Promise<User>
+  getUserByEmail(email: string): Promise<User | null>
+  getUserById(id: string): Promise<User | null>
+  updateUserConfirmationToken(id: string, confirmationToken: string): Promise<void>
 }
 
 export class DatabaseServices implements IDatabaseServices {
@@ -25,10 +26,44 @@ export class DatabaseServices implements IDatabaseServices {
   }
 
   async getUserByEmail(email: string) {
-    console.log('Getting user by email:', email)
+    const userFromDb = await getUserByEmail(email)
 
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    if (!userFromDb) {
+      return null
+    }
 
-    return USER_MOCK
+    return {
+      id: userFromDb.id,
+      firstName: userFromDb.firstName,
+      lastName: userFromDb.lastName,
+      email: userFromDb.email,
+      isEmailVerified: userFromDb.isEmailVerified,
+      ownedTrips: [],
+      invites: []
+    }
+  }
+
+  async getUserById(id: string) {
+    const userFromDb = await getUserById(id)
+
+    if (!userFromDb) {
+      return null
+    }
+
+    return {
+      id: userFromDb.id,
+      firstName: userFromDb.firstName,
+      lastName: userFromDb.lastName,
+      email: userFromDb.email,
+      isEmailVerified: userFromDb.isEmailVerified,
+      ownedTrips: [],
+      invites: []
+    }
+  }
+
+  async updateUserConfirmationToken(id: string, confirmationToken: string) {
+    await updateUserConfirmationToken(id, confirmationToken)
+
+    return
   }
 }
