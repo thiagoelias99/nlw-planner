@@ -1,7 +1,7 @@
 import { CreateTripDto } from '@/dto/create-trip-dto'
 
 export interface IEmailServices {
-  sendTripCreatedEmail(dto: CreateTripDto, tripId: string): Promise<void>
+  sendTripCreatedEmail(dto: CreateTripDto, tripId: string, confirmationToken: string): Promise<void>
 }
 
 export class EmailServices implements IEmailServices{
@@ -14,7 +14,7 @@ export class EmailServices implements IEmailServices{
     return EmailServices.instance
   }
 
-  async sendTripCreatedEmail(dto: CreateTripDto, tripId: string) {
+  async sendTripCreatedEmail(dto: CreateTripDto, tripId: string, confirmationToken: string) {
     console.log('Sending trip created email:', dto.ownerEmail, tripId)
 
     await new Promise(resolve => setTimeout(resolve, 2000))

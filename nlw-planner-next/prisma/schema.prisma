@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String  @id @default(cuid())
+  firstName         String  @default("") @map("first_name")
+  lastName          String  @default("") @map("last_name")
+  email             String  @unique
+  isEmailVerified   Boolean @default(false) @map("is_email_verified")
+  confirmationToken String  @default("") @map("confirmation_token")
+
+  Trips Trip[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Trip {
+  id                String   @id @default(cuid())
+  ownerEmail        String   @map("owner_email")
+  destination       String
+  startDate         DateTime @map("start_date")
+  endDate           DateTime @map("end_date")
+  isTripVerified    Boolean  @default(false) @map("is_trip_verified")
+  confirmationToken String   @map("confirmation_token")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  User User @relation(fields: [ownerEmail], references: [email])
+
+  @@index([ownerEmail])
+  @@map("trips")
+}

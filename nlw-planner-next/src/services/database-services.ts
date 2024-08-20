@@ -1,9 +1,10 @@
 import { CreateTripDto } from '@/dto/create-trip-dto'
 import { USER_MOCK } from '@/lib/mocks'
+import { saveTripAction } from './actions/database/save-trip-action'
 
 
 export interface IDatabaseServices {
-  saveTrip(dto: CreateTripDto): Promise<string>
+  saveTrip(dto: CreateTripDto, confirmationToken: string): Promise<string>
   getUserByEmail(email: string): Promise<User>
 }
 
@@ -18,13 +19,9 @@ export class DatabaseServices implements IDatabaseServices {
     return DatabaseServices.instance
   }
 
-  async saveTrip(dto: CreateTripDto) {
-    console.log('Saving trip to database:', dto)
-
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    //TODO: Implement this function
-
-    return 'created-trip-id'
+  async saveTrip(dto: CreateTripDto, confirmationToken: string) {
+    const createdTrip = await saveTripAction(dto, confirmationToken)
+    return createdTrip.id
   }
 
   async getUserByEmail(email: string) {

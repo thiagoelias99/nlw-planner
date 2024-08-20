@@ -35,11 +35,14 @@ export class TripServices {
     isEmailVerified: boolean
   }> {
 
-    const tripId = await this.databaseServices.saveTrip(dto)
+    //Create a random confirmation token with 6 numeric digits
+    const confirmationToken = Math.floor(100000 + Math.random() * 900000).toString()
+
+    const tripId = await this.databaseServices.saveTrip(dto, confirmationToken)
     const isEmailVerified = await this.userServices.checkIfEmailIsVerified(dto.ownerEmail)
 
     if (isEmailVerified) {
-      await this.emailServices.sendTripCreatedEmail(dto, tripId)
+      await this.emailServices.sendTripCreatedEmail(dto, tripId, confirmationToken)
     }
 
     return { tripId, isEmailVerified }
