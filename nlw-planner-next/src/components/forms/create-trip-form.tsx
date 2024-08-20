@@ -7,8 +7,11 @@ import { CreateTripDto } from '@/dto/create-trip-dto'
 import OwnerEmailInput, { OwnerEmailInputFormValues } from '../form-fields/owner-email-input'
 import { useRouter } from 'next/navigation'
 import { useToast } from '../ui/use-toast'
+import { TripServices } from '@/services/trip-services'
 
 export default function CreateTripForm() {
+  const tripServices = TripServices.getInstance()
+
   const [createTripDto, setCreateTripDto] = useState<CreateTripDto>({
     ownerEmail: '',
     destination: '',
@@ -47,13 +50,13 @@ export default function CreateTripForm() {
     }
     setCreateTripDto(completeData)
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+
+    const { isEmailVerified } = await tripServices.createTrip(completeData)
+
     setIsSubmitting(false)
     setOpenOwnerEmailInput(false)
 
-    const isUserAlreadyRegistered = false
-
-    if (!isUserAlreadyRegistered) {
+    if (!isEmailVerified) {
       router.push('/registro?email=' + data.email)
     } else {
       toast({

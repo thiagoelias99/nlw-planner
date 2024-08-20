@@ -1,4 +1,4 @@
-export interface CreateTripDto {
+export type CreateTripDto = {
   ownerEmail: string
   destination: string
   startDate: Date

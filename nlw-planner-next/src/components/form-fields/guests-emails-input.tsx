@@ -36,6 +36,7 @@ export default function GuestsEmailsInput({ onSubmit: parentOnSubmit, guestsEmai
   })
 
   function onSubmit(data: GuestEmailsInputFormValues) {
+    console.log(data)
     if (guestEmails.find((guest) => guest.email === data.email)) {
       return
     }
@@ -142,7 +143,7 @@ export default function GuestsEmailsInput({ onSubmit: parentOnSubmit, guestsEmai
                 />
 
                 <Button
-                  type='button'
+                  type='submit'
                   className='w-full'
                 >
                   <p>Convidar</p>
