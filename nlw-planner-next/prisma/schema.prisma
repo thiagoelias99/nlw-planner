@@ -14,16 +14,17 @@ datasource db {
 }
 
 model User {
-  id                String  @id @default(cuid())
-  firstName         String  @default("") @map("first_name")
-  lastName          String  @default("") @map("last_name")
-  email             String  @unique
-  isEmailVerified   Boolean @default(false) @map("is_email_verified")
-  confirmationToken String  @default("") @map("confirmation_token")
+  id                String   @id @default(cuid())
+  firstName         String   @default("") @map("first_name")
+  lastName          String   @default("") @map("last_name")
+  email             String   @unique
+  isEmailVerified   Boolean  @default(false) @map("is_email_verified")
+  confirmationToken String   @default("") @map("confirmation_token")
   createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @default(now()) @map("updated_at")
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
 
-  Trips Trip[]
+  Trips   Trip[]
+  Invites Invites[]
 
   @@index([email])
   @@map("users")
@@ -38,9 +39,35 @@ model Trip {
   isTripVerified    Boolean  @default(false) @map("is_trip_verified")
   confirmationToken String   @map("confirmation_token")
   createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
 
-  User User @relation(fields: [ownerEmail], references: [email])
+  User    User      @relation(fields: [ownerEmail], references: [email], onUpdate: Cascade, onDelete: Cascade)
+  Invites Invites[]
 
   @@index([ownerEmail])
   @@map("trips")
+}
+
+model Invites {
+  id           String       @id @default(cuid())
+  tripId       String       @map("trip_id")
+  guestEmail   String       @map("guest_email")
+  inviteStatus InviteStatus @default(NOT_SENT) @map("invite_status")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @default(now()) @updatedAt @map("updated_at")
+
+  Trip Trip @relation(fields: [tripId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  User User @relation(fields: [guestEmail], references: [email], onUpdate: Cascade, onDelete: Cascade)
+
+  @@index([tripId, guestEmail])
+  @@map("invites")
+}
+
+enum InviteStatus {
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  EXCLUDED
+  PENDING
+  NOT_SENT
 }

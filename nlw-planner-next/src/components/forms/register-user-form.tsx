@@ -18,6 +18,7 @@ import { MailIcon, UserIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useToast } from '../ui/use-toast'
 import { UserServices } from '@/services/user-services'
+import { sendUserLoginConfirmationTokenEmailAction } from '@/services/actions/mail-actions'
 
 const formSchema = z.object({
   firstName: z.string().min(2).max(50),
@@ -45,7 +46,9 @@ export default function RegisterUserForm() {
     setIsSubmitting(true)
 
     try {
-      const userId = await usersServices.createUser(values)
+      const {user, confirmationToken} = await usersServices.createUser(values)
+
+      await sendUserLoginConfirmationTokenEmailAction(user, confirmationToken)
 
       form.reset()
       form.setValue('email', '')
@@ -55,7 +58,10 @@ export default function RegisterUserForm() {
         description: 'Verifique seu email para continuar',
       })
       setIsSubmitting(false)
-      router.push('/verificar-token?id=' + userId)
+      router.push('/verificar-token?id=' + user.id)
+
+
+
     } catch (error) {
       console.error(error)
       toast({

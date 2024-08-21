@@ -25,7 +25,6 @@ declare type TripInvite = {
   id: string
   trip: Trip
   invitedUser: User
-  isInviteVerified: boolean
   inviteStatus: InviteStatus
 }
 
@@ -35,4 +34,5 @@ declare enum InviteStatus {
   CANCELLED = 'CANCELLED',
   EXCLUDED = 'EXCLUDED',
   PENDING = 'PENDING',
+  NOT_SENT = 'NOT_SENT'
 }

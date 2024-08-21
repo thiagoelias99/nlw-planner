@@ -61,7 +61,7 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [X] Save trip
 - [X] Login
 - [X] Send email
-- [ ] Save invites
+- [X] Save invites
 - [ ] List trips
 - [ ] Send invites
 

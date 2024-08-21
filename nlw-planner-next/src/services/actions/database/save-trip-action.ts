@@ -19,6 +19,23 @@ export async function saveTripAction(dto: CreateTripDto, confirmationToken: stri
             email: dto.ownerEmail
           }
         }
+      },
+      Invites: {
+        create: dto.guestsEmails.map(invite => {
+          return {
+            User: {
+              connectOrCreate: {
+                where: {
+                  email: invite.email
+                },
+                create: {
+                  email: invite.email,
+                  firstName: invite.name,
+                }
+              }
+            }
+          }
+        })
       }
     }
   })

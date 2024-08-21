@@ -8,7 +8,7 @@ export interface IUserServices {
   getUserByEmail(email: string): Promise<User | null>
   getUserById(id: string): Promise<User | null>
   sendEmailVerification(email: string): Promise<string>
-  createUser(dto: CreateUserDto): Promise<string>
+  createUser(dto: CreateUserDto): Promise<{user: User, confirmationToken: string}>
   setEmailVerified(userId: string, status: boolean): Promise<void>
 }
 
@@ -62,7 +62,10 @@ export class UserServices implements IUserServices {
     return confirmationToken
   }
 
-  async createUser(dto: CreateUserDto): Promise<string>{
+  async createUser(dto: CreateUserDto): Promise<{
+    user: User
+    confirmationToken: string
+  }>{
     //Generate confirmation token
     const confirmationToken = createConfirmationToken()
     //Create User
@@ -71,7 +74,7 @@ export class UserServices implements IUserServices {
     //Send email
     this.emailServices.sendUserRegisterConfirmationTokenEmail(user, confirmationToken)
 
-    return user.id
+    return {user: user, confirmationToken}
   }
 
   async setEmailVerified(userId: string, status: boolean): Promise<void> {
