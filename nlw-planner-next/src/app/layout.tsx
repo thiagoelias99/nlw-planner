@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/toaster'
 import LoginHeader from '@/components/login-header'
 import { auth } from '@/auth'
+import { getMailClient } from '@/infra/mailer'
 
 const inter = Inter({ subsets: ['latin'] })
 

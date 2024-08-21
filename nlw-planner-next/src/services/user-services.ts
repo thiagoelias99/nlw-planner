@@ -7,7 +7,7 @@ export interface IUserServices {
   checkIfEmailIsVerified(email: string): Promise<boolean>
   getUserByEmail(email: string): Promise<User | null>
   getUserById(id: string): Promise<User | null>
-  sendEmailVerification(email: string): Promise<void>
+  sendEmailVerification(email: string): Promise<string>
   createUser(dto: CreateUserDto): Promise<string>
   setEmailVerified(userId: string, status: boolean): Promise<void>
 }
@@ -42,7 +42,7 @@ export class UserServices implements IUserServices {
     return this.databaseServices.getUserById(id)
   }
 
-  async sendEmailVerification(email: string): Promise<void> {
+  async sendEmailVerification(email: string): Promise<string> {
     const user = await this.databaseServices.getUserByEmail(email)
 
     if (!user) {
@@ -58,7 +58,8 @@ export class UserServices implements IUserServices {
     await this.databaseServices.updateUserConfirmationToken(user.id, confirmationToken)
 
     //Send email
-    this.emailServices.sendUserLoginConfirmationTokenEmail(user, confirmationToken)
+    //Repassed to component to send email
+    return confirmationToken
   }
 
   async createUser(dto: CreateUserDto): Promise<string>{

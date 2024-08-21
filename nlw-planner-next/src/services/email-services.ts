@@ -1,4 +1,6 @@
 import { CreateTripDto } from '@/dto/create-trip-dto'
+import { sendUserLoginConfirmationTokenEmailAction } from './actions/mail-actions'
+
 
 export interface IEmailServices {
   sendTripCreatedEmail(dto: CreateTripDto, tripId: string, confirmationToken: string): Promise<void>
@@ -26,10 +28,10 @@ export class EmailServices implements IEmailServices {
 
   //Send user login confirmation token email
   async sendUserLoginConfirmationTokenEmail(user: User, confirmationToken: string) {
-    console.log('Sending user confirmation token email:', user.email, confirmationToken)
+    // return sendUserLoginConfirmationTokenEmailAction(user, confirmationToken)
 
     await new Promise(resolve => setTimeout(resolve, 2000))
-    //TODO: Implement this function
+    return
   }
 
   //Send user register confirmation token email

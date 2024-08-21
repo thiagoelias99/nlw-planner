@@ -18,6 +18,7 @@ import { MailIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useToast } from '../ui/use-toast'
 import { UserServices } from '@/services/user-services'
+import { sendUserLoginConfirmationTokenEmailAction } from '@/services/actions/mail-actions'
 
 const formSchema = z.object({
   email: z.string().email()
@@ -48,7 +49,9 @@ export default function LoginForm() {
         return
       }
 
-      await usersServices.sendEmailVerification(user.email)
+      const token = await usersServices.sendEmailVerification(user.email)
+
+      await sendUserLoginConfirmationTokenEmailAction(user, token)
 
       form.setValue('email', '')
 
