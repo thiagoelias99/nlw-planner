@@ -1,28 +1,33 @@
 import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { UserServices } from './services/user-services'
-import { EmailNotVerifiedError, UserNotFoundError } from './lib/errors'
+import { EmailNotVerifiedError, InvalidToken, UserNotFoundError } from './lib/errors'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       credentials: {
-        email: {}
+        userId: {},
+        token: {}
       },
 
-      authorize: async (credentials) => {
+      authorize: async ({ userId, token }) => {
         let user: User | null = null
 
         const usersService = UserServices.getInstance()
-        user = await usersService.getUserByEmail(credentials.email as string)
+        user = await usersService.getUserById(userId as string)
 
         if (!user) {
-          throw new UserNotFoundError(credentials.email as string)
+          throw new UserNotFoundError(userId as string)
         }
 
-        if (!user.isEmailVerified) {
-          throw new EmailNotVerifiedError(credentials.email as string)
+        if (user.confirmationToken !== token) {
+          throw new InvalidToken(user.email as string)
         }
+
+        await usersService.setEmailVerified(userId as string, true)
+
+        console.log(user)
 
         return user
       },

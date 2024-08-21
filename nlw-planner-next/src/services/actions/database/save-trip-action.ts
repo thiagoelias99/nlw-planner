@@ -68,3 +68,14 @@ export async function saveUserAction(dto: CreateUserDto, confirmationToken: stri
     }
   })
 }
+
+export async function updateUserEmailVerifiedAction(id: string, isEmailVerified: boolean) {
+  return prisma.user.update({
+    where: {
+      id
+    },
+    data: {
+      isEmailVerified
+    }
+  })
+}

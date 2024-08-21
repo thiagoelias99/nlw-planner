@@ -2,8 +2,10 @@ declare type User = {
   id: string
   firstName: string
   lastName: string
+  name: string
   email: string
   isEmailVerified: boolean
+  confirmationToken: string
   ownedTrips: Trip[]
   invites: TripInvite[]
 }

@@ -9,6 +9,7 @@ export interface IUserServices {
   getUserById(id: string): Promise<User | null>
   sendEmailVerification(email: string): Promise<void>
   createUser(dto: CreateUserDto): Promise<string>
+  setEmailVerified(userId: string, status: boolean): Promise<void>
 }
 
 export class UserServices implements IUserServices {
@@ -70,5 +71,9 @@ export class UserServices implements IUserServices {
     this.emailServices.sendUserRegisterConfirmationTokenEmail(user, confirmationToken)
 
     return user.id
+  }
+
+  async setEmailVerified(userId: string, status: boolean): Promise<void> {
+    await this.databaseServices.updateUserEmailVerified(userId, status)
   }
 }

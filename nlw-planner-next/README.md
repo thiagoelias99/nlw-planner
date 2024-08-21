@@ -50,25 +50,16 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - Firebase + Firestore for database.
 
 ### ROADMAP
-#### [ ] Create Trip
+#### [ ] Create Trip && User
 - [X] User schema
 - [X] Trip schema
 - [X] Create user dto
 - [X] Create trip dto
 - [X] Create trip form
 - [X] Create user form
-- [ ] User Services - Register User
-- [ ] Database Service - Save User
-- [ ] Email Service - Send Register User Email
-- [ ] Trip Services - Register Trip
-- [ ] Database Service - Save Trip
-- [ ] Email Service - Send Register User Email
-- [ ] User Services - Confirm User
-- [ ] Trip Services - Send Trip Owner Email
-- [ ] Email Service - Send Trip Owner Email
-- [ ] Trip Services - Confirm Trip
-- [ ] Trip Services - Send Trip Guests Email
-- [ ] Email Service - Send Trip Guests Email
+- [X] Save user
+- [X] Save trip
+- [ ] Login
 
 #### Create Activities
 - [ ] Activity schema

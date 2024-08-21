@@ -11,3 +11,10 @@ export class EmailNotVerifiedError extends Error {
     this.name = 'EmailNotVerifiedError'
   }
 }
+
+export class InvalidToken extends Error {
+  constructor(email: string) {
+    super(`Invalid token for email ${email}`)
+    this.name = 'InvalidToken'
+  }
+}

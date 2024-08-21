@@ -1,5 +1,6 @@
 import { CreateTripDto } from '@/dto/create-trip-dto'
-import { getUserByEmail, getUserById, saveTripAction, saveUserAction, updateUserConfirmationToken } from './actions/database/save-trip-action'
+import { getUserByEmail, getUserById, saveTripAction, saveUserAction, updateUserConfirmationToken, updateUserEmailVerifiedAction } from './actions/database/save-trip-action'
+import { User as PrismaUser } from '@prisma/client'
 
 
 export interface IDatabaseServices {
@@ -7,6 +8,7 @@ export interface IDatabaseServices {
   getUserByEmail(email: string): Promise<User | null>
   getUserById(id: string): Promise<User | null>
   updateUserConfirmationToken(id: string, confirmationToken: string): Promise<void>
+  updateUserEmailVerified(userId: string, status: boolean): Promise<User>
   createUser(dto: CreateUserDto, confirmationToken: string): Promise<User>
 }
 
@@ -21,6 +23,20 @@ export class DatabaseServices implements IDatabaseServices {
     return DatabaseServices.instance
   }
 
+  private databaseToUserDto(data: PrismaUser): User {
+    return {
+      id: data.id,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      name: `${data.firstName} ${data.lastName}`,
+      email: data.email,
+      isEmailVerified: data.isEmailVerified,
+      confirmationToken: data.confirmationToken,
+      ownedTrips: [],
+      invites: []
+    }
+  }
+
   async saveTrip(dto: CreateTripDto, confirmationToken: string) {
     const createdTrip = await saveTripAction(dto, confirmationToken)
     return createdTrip.id
@@ -33,15 +49,7 @@ export class DatabaseServices implements IDatabaseServices {
       return null
     }
 
-    return {
-      id: userFromDb.id,
-      firstName: userFromDb.firstName,
-      lastName: userFromDb.lastName,
-      email: userFromDb.email,
-      isEmailVerified: userFromDb.isEmailVerified,
-      ownedTrips: [],
-      invites: []
-    }
+    return this.databaseToUserDto(userFromDb)
   }
 
   async getUserById(id: string) {
@@ -51,15 +59,7 @@ export class DatabaseServices implements IDatabaseServices {
       return null
     }
 
-    return {
-      id: userFromDb.id,
-      firstName: userFromDb.firstName,
-      lastName: userFromDb.lastName,
-      email: userFromDb.email,
-      isEmailVerified: userFromDb.isEmailVerified,
-      ownedTrips: [],
-      invites: []
-    }
+    return this.databaseToUserDto(userFromDb)
   }
 
   async updateUserConfirmationToken(id: string, confirmationToken: string) {
@@ -67,17 +67,14 @@ export class DatabaseServices implements IDatabaseServices {
     return
   }
 
-  async createUser(dto: CreateUserDto, confirmationToken: string): Promise<User>{
+  async createUser(dto: CreateUserDto, confirmationToken: string): Promise<User> {
     const createdUser = await saveUserAction(dto, confirmationToken)
-    
-    return {
-      id: createdUser.id,
-      firstName: createdUser.firstName,
-      lastName: createdUser.lastName,
-      email: createdUser.email,
-      isEmailVerified: createdUser.isEmailVerified,
-      ownedTrips: [],
-      invites: []
-    }
+
+    return this.databaseToUserDto(createdUser)
+  }
+
+  async updateUserEmailVerified(userId: string, status: boolean) {
+    const updatedUser = await updateUserEmailVerifiedAction(userId, status)
+    return this.databaseToUserDto(updatedUser)
   }
 }

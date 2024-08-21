@@ -6,6 +6,8 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "is_email_verified" BOOLEAN NOT NULL DEFAULT false,
     "confirmation_token" TEXT NOT NULL DEFAULT '',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );

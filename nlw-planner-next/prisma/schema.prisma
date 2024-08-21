@@ -20,6 +20,8 @@ model User {
   email             String  @unique
   isEmailVerified   Boolean @default(false) @map("is_email_verified")
   confirmationToken String  @default("") @map("confirmation_token")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @default(now()) @map("updated_at")
 
   Trips Trip[]
 
