@@ -45,6 +45,17 @@ export async function getUserByEmail(email: string) {
   return prisma.user.findUnique({
     where: {
       email
+    },
+    include: {
+      Trips: {
+        include: {
+          Invites: {
+            include: {
+              User: true
+            }
+          }
+        }
+      }
     }
   })
 }
@@ -53,6 +64,13 @@ export async function getUserById(id: string) {
   return prisma.user.findUnique({
     where: {
       id
+    },
+    include: {
+      Trips: {
+        include: {
+          Invites: true
+        }
+      }
     }
   })
 }
@@ -82,6 +100,13 @@ export async function saveUserAction(dto: CreateUserDto, confirmationToken: stri
       firstName: dto.firstName,
       lastName: dto.lastName,
       confirmationToken
+    },
+    include: {
+      Trips: {
+        include: {
+          Invites: true
+        }
+      }
     }
   })
 }
@@ -93,6 +118,13 @@ export async function updateUserEmailVerifiedAction(id: string, isEmailVerified:
     },
     data: {
       isEmailVerified
+    },
+    include: {
+      Trips: {
+        include: {
+          Invites: true
+        }
+      }
     }
   })
 }

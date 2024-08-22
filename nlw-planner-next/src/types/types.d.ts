@@ -6,8 +6,6 @@ declare type User = {
   email: string
   isEmailVerified: boolean
   confirmationToken: string
-  ownedTrips: Trip[]
-  invites: TripInvite[]
 }
 
 declare type Trip = {
@@ -23,8 +21,8 @@ declare type Trip = {
 
 declare type TripInvite = {
   id: string
-  trip: Trip
-  invitedUser: User
+  trip?: Trip
+  invitedUser?: User
   inviteStatus: InviteStatus
 }
 

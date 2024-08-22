@@ -1,6 +1,6 @@
 import { CreateTripDto } from '@/dto/create-trip-dto'
 import { getUserByEmail, getUserById, saveTripAction, saveUserAction, updateUserConfirmationToken, updateUserEmailVerifiedAction } from './actions/database/save-trip-action'
-import { User as PrismaUser } from '@prisma/client'
+import { Prisma, User as PrismaUser, Trip as PrismaTrip } from '@prisma/client'
 
 
 export interface IDatabaseServices {
@@ -32,8 +32,6 @@ export class DatabaseServices implements IDatabaseServices {
       email: data.email,
       isEmailVerified: data.isEmailVerified,
       confirmationToken: data.confirmationToken,
-      ownedTrips: [],
-      invites: []
     }
   }
 
@@ -49,7 +47,9 @@ export class DatabaseServices implements IDatabaseServices {
       return null
     }
 
-    return this.databaseToUserDto(userFromDb)
+    const test = this.databaseToUserDto(userFromDb)
+
+    return test
   }
 
   async getUserById(id: string) {

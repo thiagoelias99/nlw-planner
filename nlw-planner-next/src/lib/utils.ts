@@ -1,4 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -8,4 +10,9 @@ export function cn(...inputs: ClassValue[]) {
 //Create a random confirmation token with 6 numeric digits
 export function createConfirmationToken() {
   return Math.floor(100000 + Math.random() * 900000).toString()
+}
+
+//Describe date range
+export function describeDateRange(startAt: Date, endsAt: Date, locale = ptBR) {
+  return `${format(startAt, 'dd \'de\' LLL y', { locale: locale })} a ${format(endsAt, 'dd \'de\' LLL y', { locale: ptBR })}`
 }
