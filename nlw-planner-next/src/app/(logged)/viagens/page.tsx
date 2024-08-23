@@ -9,6 +9,7 @@ import React from 'react'
 import TripDropDown from './_components/trip-dropdown'
 import InviteDropDown from './_components/invite-dropdown'
 import Link from 'next/link'
+import Header1 from '@/components/header1'
 
 export default async function Viagens() {
   const session = await auth()
@@ -49,7 +50,7 @@ export default async function Viagens() {
 
   return (
     <main className='p-4'>
-      <h1 className='text-2xl font-bold'>Minhas Viagens</h1>
+      <Header1 className='text-2xl font-bold'>Minhas Viagens</Header1>
 
       <div className='w-full mt-4 flex flex-col gap-4'>
         {ownedTrips.map(trip => {
