@@ -36,17 +36,21 @@ interface DestinationAndDateInputsProps {
   disabled?: boolean
   onSubmit: (values: DestinationAndDateInputsFormValues) => void
   onBack?: () => void
+  defaultValues?: Partial<DestinationAndDateInputsFormValues>
 }
 
-export default function DestinationAndDateInputs({ disabled, onSubmit, onBack }: DestinationAndDateInputsProps) {
-  const [date, setDate] = useState<DateRange | undefined>(undefined)
+export default function DestinationAndDateInputs({ disabled, onSubmit, onBack, defaultValues }: DestinationAndDateInputsProps) {
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: defaultValues?.startAt ? new Date(defaultValues.startAt) : undefined,
+    to: defaultValues?.endsAt ? new Date(defaultValues.endsAt) : undefined,
+  })
 
   const form = useForm<DestinationAndDateInputsFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      destination: undefined,
-      startAt: undefined,
-      endsAt: undefined,
+      destination: defaultValues?.destination || undefined,
+      startAt: defaultValues?.startAt || undefined,
+      endsAt: defaultValues?.endsAt || undefined,
     },
   })
 
@@ -55,7 +59,7 @@ export default function DestinationAndDateInputs({ disabled, onSubmit, onBack }:
       form.setValue('startAt', date.from)
       form.setValue('endsAt', date.to)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date])
 
   return (
