@@ -1,3 +1,4 @@
+import { InviteStatus } from '@prisma/client'
 import { type ClassValue, clsx } from 'clsx'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -15,4 +16,16 @@ export function createConfirmationToken() {
 //Describe date range
 export function describeDateRange(startAt: Date, endsAt: Date, locale = ptBR) {
   return `${format(startAt, 'dd \'de\' LLL y', { locale: locale })} a ${format(endsAt, 'dd \'de\' LLL y', { locale: ptBR })}`
+}
+
+export function mapInviteStatus(inviteStatus: InviteStatus): string {
+  switch (inviteStatus) {
+    case InviteStatus.ACCEPTED:
+      return 'Confirmado'
+    case InviteStatus.REJECTED:
+      return 'Rejeitado'
+    case InviteStatus.PENDING:
+    default:
+      return 'Pendente'
+  }
 }

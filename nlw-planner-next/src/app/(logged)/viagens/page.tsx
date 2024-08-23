@@ -3,12 +3,13 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import prisma from '@/infra/prisma'
-import { describeDateRange } from '@/lib/utils'
+import { describeDateRange, mapInviteStatus } from '@/lib/utils'
 import { InviteStatus } from '@prisma/client'
 import { CalendarIcon, CheckIcon, EllipsisVerticalIcon, LucideIcon, MapPinIcon, UserCheck2Icon, Users2Icon } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import TripDropDown from './_components/trip-dropdown'
+import InviteDropDown from './_components/invite-dropdown'
 
 export default async function Viagens() {
   const session = await auth()
@@ -23,6 +24,27 @@ export default async function Viagens() {
     },
     include: {
       Invites: true
+    }
+  })
+
+  const invitedTrips = await prisma.invites.findMany({
+    where: {
+      guestEmail: session?.user.email || '',
+      inviteStatus: {
+        not: InviteStatus.EXCLUDED
+      }
+    },
+    include: {
+      Trip: {
+        include: {
+          User: {
+            select: {
+              firstName: true,
+              lastName: true
+            }
+          }
+        }
+      }
     }
   })
 
@@ -68,6 +90,38 @@ export default async function Viagens() {
                 <CardItem
                   Icon={Users2Icon}
                   value={`${trip.Invites.length} convidados - ${trip.Invites.filter(invite => invite.inviteStatus === InviteStatus.ACCEPTED).length} confirmados`}
+                />
+              </CardContent>
+            </Card>
+          )
+        })}
+        {invitedTrips.map(invite => {
+          return (
+            <Card key={invite.Trip.id}>
+              <CardHeader className='w-full pt-0.5 pb-3'>
+                <div className='w-full flex justify-between items-start'>
+                  <div className='w-full flex justify-start items-baseline gap-0.5'>
+                    <p className='text-sm'>{mapInviteStatus(invite.inviteStatus)}</p>
+                  </div>
+                  <InviteDropDown
+                    invite={invite}
+                  />
+                </div>
+
+                <div className='flex flex-row items-baseline justify-start gap-2'>
+                  <MapPinIcon className='h-full' />
+                  <CardTitle className='p-0 m-0'>{invite.Trip.destination}</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className='flex flex-col justify-start items-start gap-1 pb-2'>
+                <CardItem
+                  Icon={CalendarIcon}
+                  value={describeDateRange(invite.Trip.startDate, invite.Trip.endDate)}
+                />
+                <CardItem
+                  Icon={UserCheck2Icon}
+                  label='Criado por'
+                  value={`${invite.Trip.User.firstName} ${invite.Trip.User.lastName}` || ''}
                 />
               </CardContent>
             </Card>
