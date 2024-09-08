@@ -59,9 +59,18 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [X] Trip Services
 - [X] Email Service
 - [X] Send Email to Owner
-- [ ] Confirm trip endpoint
-- [ ] Send email to guests
-- [ ] Redirect to trip details
+- [X] Confirm trip endpoint
+- [X] Send email to guests
+- [X] Redirect to trip details
+
+#### Create Links
+- [X] Links schema
+- [ ] Create link endpoint
+- [ ] Link form
+- [ ] List links
+- [ ] Navigate to link
+- [ ] Edit link
+- [ ] Delete Links
 
 #### Create Activities
 - [ ] Activity schema
@@ -71,19 +80,3 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [ ] Check / uncheck activity
 - [ ] Edit activity
 - [ ] Delete activity
-
-#### Create Links
-- [ ] Links schema
-- [ ] Create link endpoint
-- [ ] Link form
-- [ ] List links
-- [ ] Navigate to link
-- [ ] Edit link
-- [ ] Delete Links
-
-#### Manage Guests
-- [ ] Guest schema
-- [ ] Add guest endpoint
-- [ ] Guest form
-- [ ] List guests
-- [ ] Remove guests

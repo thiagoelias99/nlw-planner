@@ -25,6 +25,7 @@ model User {
 
   Trips   Trip[]
   Invites Invites[]
+  Links   Links[]
 
   @@index([email])
   @@map("users")
@@ -43,6 +44,7 @@ model Trip {
 
   User    User      @relation(fields: [ownerEmail], references: [email], onUpdate: Cascade, onDelete: Cascade)
   Invites Invites[]
+  Links   Links[]
 
   @@index([ownerEmail])
   @@map("trips")
@@ -70,4 +72,20 @@ enum InviteStatus {
   EXCLUDED
   PENDING
   NOT_SENT
+}
+
+model Links {
+  id        String   @id @default(cuid())
+  tripId    String   @map("trip_id")
+  userId    String   @map("user_id")
+  title     String
+  url       String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  Trip Trip @relation(fields: [tripId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  User User @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@index([tripId])
+  @@map("links")
 }
