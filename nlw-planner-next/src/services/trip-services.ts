@@ -2,6 +2,7 @@ import { CreateTripDto } from '@/dto/create-trip-dto'
 import { IUserServices, UserServices } from './user-services'
 import { DatabaseServices, IDatabaseServices } from './database-services'
 import { createConfirmationToken } from '@/lib/utils'
+import { CreateLinkDto } from '@/dto/create-link-dto'
 
 export interface ITripServices {
   createTrip(dto: CreateTripDto): Promise<{
@@ -38,5 +39,9 @@ export class TripServices {
     const isEmailVerified = await this.userServices.checkIfEmailIsVerified(dto.ownerEmail)
 
     return { tripId, isEmailVerified }
+  }
+
+  async registerLink(data: CreateLinkDto): Promise<void> {
+    await this.databaseServices.saveLink(data)
   }
 }

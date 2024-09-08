@@ -1,5 +1,6 @@
 'use server'
 
+import { CreateLinkDto } from '@/dto/create-link-dto'
 import { CreateTripDto } from '@/dto/create-trip-dto'
 import { PrismaClient } from '@prisma/client'
 
@@ -125,6 +126,17 @@ export async function updateUserEmailVerifiedAction(id: string, isEmailVerified:
           Invites: true
         }
       }
+    }
+  })
+}
+
+export async function saveLinkAction(data: CreateLinkDto) {
+  return prisma.links.create({
+    data: {
+      title: data.title,
+      url: data.url,
+      tripId: data.tripId,
+      userId: data.userId
     }
   })
 }

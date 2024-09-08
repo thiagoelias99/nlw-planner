@@ -34,3 +34,10 @@ declare enum InviteStatus {
   PENDING = 'PENDING',
   NOT_SENT = 'NOT_SENT'
 }
+
+declare type Link = {
+  id: string
+  title: string
+  url: string
+  userName: string
+}

@@ -1,9 +1,11 @@
 import { CreateTripDto } from '@/dto/create-trip-dto'
-import { getUserByEmail, getUserById, saveTripAction, saveUserAction, updateUserConfirmationToken, updateUserEmailVerifiedAction } from './actions/database/save-trip-action'
+import { getUserByEmail, getUserById, saveLinkAction, saveTripAction, saveUserAction, updateUserConfirmationToken, updateUserEmailVerifiedAction } from './actions/database/save-trip-action'
 import { Prisma, User as PrismaUser, Trip as PrismaTrip } from '@prisma/client'
+import { CreateLinkDto } from '@/dto/create-link-dto'
 
 
 export interface IDatabaseServices {
+  saveLink(data: CreateLinkDto): unknown
   saveTrip(dto: CreateTripDto, confirmationToken: string): Promise<string>
   getUserByEmail(email: string): Promise<User | null>
   getUserById(id: string): Promise<User | null>
@@ -76,5 +78,9 @@ export class DatabaseServices implements IDatabaseServices {
   async updateUserEmailVerified(userId: string, status: boolean) {
     const updatedUser = await updateUserEmailVerifiedAction(userId, status)
     return this.databaseToUserDto(updatedUser)
+  }
+
+  async saveLink(data: CreateLinkDto): Promise<void> {
+    await saveLinkAction(data)
   }
 }
