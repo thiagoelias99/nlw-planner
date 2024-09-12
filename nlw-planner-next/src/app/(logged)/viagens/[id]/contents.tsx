@@ -3,18 +3,15 @@
 import { updateTrip } from '@/actions/update-trip'
 import DestinationAndDateInputs, { DestinationAndDateInputsFormValues } from '@/components/form-fields/destination-and-date-inputs'
 import { useToast } from '@/components/ui/use-toast'
-import { Trip as PrismaTrip } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import ActivitiesSection from './_components/activities-section'
 import LinksSection from './_components/links-section'
+import { useTrip } from '@/hooks/useTrip'
 
-interface Props {
-  trip?: PrismaTrip
-}
-
-export default function TripDetailsContents({ trip }: Props) {
+export default function TripDetailsContents({ tripId }: { tripId: string }) {
   const router = useRouter()
   const { toast } = useToast()
+  const { trip } = useTrip(tripId)
 
   async function onSubmit(data: DestinationAndDateInputsFormValues) {
     try {
@@ -38,7 +35,7 @@ export default function TripDetailsContents({ trip }: Props) {
         }}
         onSubmit={onSubmit}
       />
-      <LinksSection />
+      <LinksSection tripId={tripId} className='mt-4' />
       <ActivitiesSection />
     </div>
   )

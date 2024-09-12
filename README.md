@@ -63,13 +63,12 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [X] Send email to guests
 - [X] Redirect to trip details
 
-#### Create Links
+#### Links
 - [X] Links schema
 - [X] Create link endpoint
 - [X] Link form
 - [X] List links
-- [ ] Navigate to link
-- [ ] Edit link
+- [X] Navigate to link
 - [ ] Delete Links
 
 #### Create Activities

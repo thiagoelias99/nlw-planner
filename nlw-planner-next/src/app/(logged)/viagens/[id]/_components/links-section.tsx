@@ -14,9 +14,22 @@ import {
 } from '@/components/ui/form'
 import InputWithLeadingIcon from '@/components/form-fields/Input-with-leading-icon'
 import CustomFormItem from '@/components/ui/custom-form-item'
+import { useTrip } from '@/hooks/useTrip'
+import { useToast } from '@/components/ui/use-toast'
+import { useState } from 'react'
+import { ClassNameValue } from 'tailwind-merge'
+import { cn } from '@/lib/utils'
 
+interface Props {
+  tripId: string
+  className?: ClassNameValue
+}
 
-export default function LinksSection() {
+export default function LinksSection({ tripId, className }: Props) {
+  const { trip, registerLink, isRegisteringLink } = useTrip(tripId)
+  const [openDialog, setOpenDialog] = useState(false)
+  const { toast } = useToast()
+
   const formSchema = z.object({
     title: z.string().min(2).max(50),
     url: z.string().url(),
@@ -30,38 +43,41 @@ export default function LinksSection() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await registerLink(values)
+      form.reset()
+      setOpenDialog(false)
+    } catch (error) {
+      console.error(error)
+      toast({
+        title: 'Erro ao cadastrar link',
+        variant: 'destructive',
+      })
+    }
   }
 
-
   return (
-    <section className='w-full space-y-2'>
+    <section className={cn('w-full space-y-2', className)}>
       <h2 className='text-xl font-bold'>Links Importantes</h2>
       <ul className='w-full space-y-2'>
-        <li className='w-full flex flex-row justify-between'>
-          <div>
-            <h3 className='text-base font-semibold'>Reserva do Airbnb</h3>
-            <p className='text-xs text-muted-foreground'>asdasdasdasdasasas</p>
-          </div>
-          <Link2Icon />
-        </li>
-        <li className='w-full flex flex-row justify-between'>
-          <div>
-            <h3 className='text-base font-semibold'>Reserva do Airbnb</h3>
-            <p className='text-xs text-muted-foreground'>asdasdasdasdasasas</p>
-          </div>
-          <Link2Icon />
-        </li>
-        <li className='w-full flex flex-row justify-between'>
-          <div>
-            <h3 className='text-base font-semibold'>Reserva do Airbnb</h3>
-            <p className='text-xs text-muted-foreground'>asdasdasdasdasasas</p>
-          </div>
-          <Link2Icon />
-        </li>
+        {trip?.Links.map(link => {
+          return (
+            <li className='w-full flex flex-row justify-between' key={link.id}>
+              <div className='max-w-[80%]'>
+                <h3 className='text-base font-semibold'>{link.title}</h3>
+                <p className='text-xs text-muted-foreground line-clamp-1'>{link.url}</p>
+              </div>
+              <Button size='icon' variant='ghost' onClick={
+                () => window.open(link.url, '_blank')
+              }>
+                <Link2Icon />
+              </Button>
+            </li>
+          )
+        })}
       </ul>
-      <Dialog>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger asChild>
           <Button
             variant='secondary'
@@ -110,7 +126,11 @@ export default function LinksSection() {
                   </CustomFormItem>
                 )}
               />
-              <Button className='w-full' type="submit">Salvar link</Button>
+              <Button
+                isLoading={isRegisteringLink}
+                className='w-full'
+                type="submit"
+              >Salvar link</Button>
             </form>
           </Form>
         </DialogContent>

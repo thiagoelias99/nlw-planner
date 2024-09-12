@@ -15,15 +15,7 @@ export default async function TripDetails({ params }: Props) {
     return notFound()
   }
 
-  const trip = await prisma.trip.findUnique({
-    where: {
-      id: params.id
-    }
-  })
-
   return (
-    <TripDetailsContents
-      trip={trip as Trip}
-    />
+    <TripDetailsContents tripId={params.id} />
   )
 }
