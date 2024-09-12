@@ -5,7 +5,8 @@ import DestinationAndDateInputs, { DestinationAndDateInputsFormValues } from '@/
 import { useToast } from '@/components/ui/use-toast'
 import { Trip as PrismaTrip } from '@prisma/client'
 import { useRouter } from 'next/navigation'
-import ActivitiesSection from './activities-section'
+import ActivitiesSection from './_components/activities-section'
+import LinksSection from './_components/links-section'
 
 interface Props {
   trip?: PrismaTrip
@@ -37,6 +38,7 @@ export default function TripDetailsContents({ trip }: Props) {
         }}
         onSubmit={onSubmit}
       />
+      <LinksSection />
       <ActivitiesSection />
     </div>
   )

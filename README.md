@@ -66,8 +66,8 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 #### Create Links
 - [X] Links schema
 - [X] Create link endpoint
-- [ ] Link form
-- [ ] List links
+- [X] Link form
+- [X] List links
 - [ ] Navigate to link
 - [ ] Edit link
 - [ ] Delete Links

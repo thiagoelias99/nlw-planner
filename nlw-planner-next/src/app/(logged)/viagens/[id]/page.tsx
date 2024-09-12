@@ -1,5 +1,5 @@
 import React from 'react'
-import TripDetailsContents from './_components/contents'
+import TripDetailsContents from './contents'
 import { notFound } from 'next/navigation'
 import prisma from '@/infra/prisma'
 import { Trip } from '@prisma/client'
