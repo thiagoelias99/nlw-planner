@@ -1,6 +1,7 @@
 import { checkActivityAction } from '@/actions/activity/check-activity'
 import { getActivitiesFromTripAction } from '@/actions/activity/get-activities-from-trip'
 import { registerActivityAction } from '@/actions/activity/register-activity-action'
+import { inviteGuestAction } from '@/actions/guest/invite-guest'
 import { registerLinkAction } from '@/actions/links/register-link-action'
 import { getTrip } from '@/actions/trip/get-trip'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -64,7 +65,20 @@ const useTrip = (tripId: string) => {
     }
   })
 
-  return { trip, activities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity, checkActivity, isCheckingActivity }
+  //Invite guest
+  const { mutateAsync: inviteGuest, isPending: isInvitingGuest } = useMutation({
+    mutationKey: ['inviteGuest', tripId],
+    mutationFn: async (data: {
+      guestEmail: string
+      guestName: string
+    }) => {
+      await inviteGuestAction({ ...data, tripId })
+
+      await queryClient.invalidateQueries({ queryKey: ['trip', tripId] })
+    }
+  })
+
+  return { trip, activities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity, checkActivity, isCheckingActivity, inviteGuest, isInvitingGuest }
 }
 
 export { useTrip }

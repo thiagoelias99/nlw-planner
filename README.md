@@ -62,6 +62,7 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [X] Confirm trip endpoint
 - [X] Send email to guests
 - [X] Redirect to trip details
+- [ ] Guest open trip
 
 #### Links
 - [X] Links schema
@@ -83,5 +84,5 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 
 #### Manage Guests
 - [X] List guest
-- [ ] Add guest
+- [X] Invite guest
 - [ ] Remove guest
