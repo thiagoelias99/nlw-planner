@@ -70,6 +70,7 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [X] List links
 - [X] Navigate to link
 - [ ] Delete Links
+- [ ] Collapse in SM
 
 #### Create Activities
 - [X] Activity schema
@@ -79,3 +80,8 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [X] Check / uncheck activity
 - [ ] Edit activity
 - [ ] Delete activity
+
+#### Manage Guests
+- [X] List guest
+- [ ] Add guest
+- [ ] Remove guest

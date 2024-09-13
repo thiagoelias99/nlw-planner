@@ -9,7 +9,16 @@ export async function getTrip(tripId: string) {
     },
     include: {
       Links: true,
-      Invites: true
+      Invites: {
+        include: {
+          User: {
+            select: {
+              firstName: true,
+              lastName: true,
+            }
+          }
+        }
+      }
     }
   })
 }

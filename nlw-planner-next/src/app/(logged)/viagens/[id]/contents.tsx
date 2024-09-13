@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import ActivitiesSection from './_components/activities-section'
 import LinksSection from './_components/links-section'
 import { useTrip } from '@/hooks/useTrip'
+import GuestsSection from './_components/guests-section'
 
 export default function TripDetailsContents({ tripId }: { tripId: string }) {
   const router = useRouter()
@@ -26,7 +27,7 @@ export default function TripDetailsContents({ tripId }: { tripId: string }) {
   }
 
   return (
-    <div className='p-4'>
+    <div className='p-4 space-y-8'>
       <DestinationAndDateInputs
         defaultValues={{
           destination: trip?.destination,
@@ -35,7 +36,8 @@ export default function TripDetailsContents({ tripId }: { tripId: string }) {
         }}
         onSubmit={onSubmit}
       />
-      <LinksSection tripId={tripId} className='mt-4' />
+      <LinksSection tripId={tripId} />
+      <GuestsSection tripId={tripId} />
       <ActivitiesSection tripId={tripId} />
     </div>
   )
