@@ -1,11 +1,21 @@
 import { Card, CardContent } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
+import { format } from 'date-fns'
 import { CircleCheckIcon, CircleDashedIcon } from 'lucide-react'
+import { ClassNameValue } from 'tailwind-merge'
 
-export default function DayItem() {
+interface Props {
+  activity: Activity,
+  className?: ClassNameValue
+}
+
+export default function DayItem({activity, className} : Props) {
   const finished = true
 
+  const date = new Date(activity.date)
+
   return (
-    <Card className='mt-2'>
+    <Card className={cn('mt-2', className)}>
       <CardContent className='py-4 w-full flex flex-row justify-between items-center'>
         <div className='w-full flex flex-row justify-start items-center gap-2'>
           {finished ? (
@@ -13,9 +23,9 @@ export default function DayItem() {
           ) : (
             <CircleDashedIcon className='' />
           )}
-          <h4>Academia em grupo</h4>
+          <h4>{activity.title}</h4>
         </div>
-        <p className='text-muted-foreground'>14:00h</p>
+        <p className='text-muted-foreground'>{format(date, 'HH:mm')}</p>
       </CardContent>
     </Card>
   )

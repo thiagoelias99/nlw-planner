@@ -1,3 +1,4 @@
+import { getActivitiesFromTripAction } from '@/actions/activity/get-activities-from-trip'
 import { registerActivityAction } from '@/actions/activity/register-activity-action'
 import { registerLinkAction } from '@/actions/links/register-link-action'
 import { getTrip } from '@/actions/trip/get-trip'
@@ -7,6 +8,7 @@ const useTrip = (tripId: string) => {
 
   const queryClient = useQueryClient()
 
+  //Get trip data
   const { data: trip } = useQuery({
     queryKey: ['trip', tripId],
     queryFn: async () => {
@@ -36,11 +38,19 @@ const useTrip = (tripId: string) => {
     }) => {
       await registerActivityAction({ ...data, tripId })
 
-      await queryClient.invalidateQueries({ queryKey: ['trip', tripId] })
+      await queryClient.invalidateQueries({ queryKey: ['tripActivities', tripId] })
     }
   })
 
-  return { trip, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity }
+  //Get activities
+  const { data: activities } = useQuery({
+    queryKey: ['tripActivities', tripId],
+    queryFn: async () => {
+      return getActivitiesFromTripAction(tripId)
+    }
+  })
+
+  return { trip, activities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity }
 }
 
 export { useTrip }

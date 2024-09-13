@@ -41,3 +41,14 @@ declare type Link = {
   url: string
   userName: string
 }
+
+declare type DayActivity = {
+  date: Date
+  activities: Activity[]
+}
+
+declare type Activity = {
+  id: string
+  title: string
+  date: Date
+}

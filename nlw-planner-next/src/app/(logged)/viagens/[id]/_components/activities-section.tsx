@@ -47,7 +47,7 @@ export default function ActivitiesSection({ tripId, className }: Props) {
 
   const [openDialog, setOpenDialog] = useState(false)
   const { toast } = useToast()
-  const { registerActivity, isRegisteringActivity } = useTrip(tripId)
+  const { trip, activities, registerActivity, isRegisteringActivity } = useTrip(tripId)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,7 +59,6 @@ export default function ActivitiesSection({ tripId, className }: Props) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-
       const date = format(values.date, 'yyyy-MM-dd')
       const dateTime = new Date(`${date}T${values.time}:00`)
 
@@ -87,7 +86,11 @@ export default function ActivitiesSection({ tripId, className }: Props) {
             </Button>
           </DialogTrigger>
         </div>
-        <DaySection />
+        <div className='space-y-4'>
+          {activities?.map((dayActivity) => (
+            <DaySection key={dayActivity.date.toString()} dayActivity={dayActivity} />
+          ))}
+        </div>
 
         <DialogContent className='w-full px-2'>
           <DialogHeader>
@@ -137,9 +140,8 @@ export default function ActivitiesSection({ tripId, className }: Props) {
                             mode="single"
                             selected={field.value}
                             onSelect={field.onChange}
-                            disabled={(date) =>
-                              date > new Date() || date < new Date('1900-01-01')
-                            }
+                            fromDate={trip?.startDate ? new Date(trip.startDate) : new Date()}
+                            toDate={trip?.endDate ? new Date(trip.endDate) : new Date()}
                           />
                         </PopoverContent>
                       </Popover>

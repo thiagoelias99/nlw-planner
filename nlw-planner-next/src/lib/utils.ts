@@ -29,3 +29,16 @@ export function mapInviteStatus(inviteStatus: InviteStatus): string {
       return 'Pendente'
   }
 }
+
+//Get dates between two dates
+export function getDatesBetween(startDate: Date, endDate: Date) {
+  let dates: Date[] = []
+  let currentDate = new Date(startDate)
+
+  while (currentDate <= endDate) {
+    dates.push(new Date(currentDate))
+    currentDate.setDate(currentDate.getDate() + 1)
+  }
+
+  return dates
+}

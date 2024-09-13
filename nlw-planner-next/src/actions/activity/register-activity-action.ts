@@ -10,9 +10,6 @@ export interface RegisterActivityDto {
 }
 
 export async function registerActivityAction(data: RegisterActivityDto) {
-
-  console.log(data)
-
   const schema = z.object({
     title: z.string().min(1).max(100),
     dateTime: z.date(),
