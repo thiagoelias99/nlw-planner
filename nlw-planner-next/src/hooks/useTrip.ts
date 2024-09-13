@@ -1,3 +1,4 @@
+import { checkActivityAction } from '@/actions/activity/check-activity'
 import { getActivitiesFromTripAction } from '@/actions/activity/get-activities-from-trip'
 import { registerActivityAction } from '@/actions/activity/register-activity-action'
 import { registerLinkAction } from '@/actions/links/register-link-action'
@@ -50,7 +51,20 @@ const useTrip = (tripId: string) => {
     }
   })
 
-  return { trip, activities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity }
+  //Check activity
+  const { mutateAsync: checkActivity, isPending: isCheckingActivity } = useMutation({
+    mutationKey: ['checkActivity', tripId],
+    mutationFn: async (data: {
+      activityId: string,
+      value: boolean
+    }) => {
+      await checkActivityAction(data)
+
+      await queryClient.invalidateQueries({ queryKey: ['tripActivities', tripId] })
+    }
+  })
+
+  return { trip, activities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity, checkActivity, isCheckingActivity }
 }
 
 export { useTrip }

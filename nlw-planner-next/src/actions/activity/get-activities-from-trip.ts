@@ -41,6 +41,7 @@ export async function getActivitiesFromTripAction(tripId: string) {
           id: activity.id,
           title: activity.title,
           date: activity.date,
+          checked: activity.checked
         }
       })
     }

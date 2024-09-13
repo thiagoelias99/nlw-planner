@@ -32,6 +32,7 @@ import { useTrip } from '@/hooks/useTrip'
 import { useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { ClassNameValue } from 'tailwind-merge'
+import { cn } from '@/lib/utils'
 
 interface Props {
   tripId: string
@@ -75,7 +76,7 @@ export default function ActivitiesSection({ tripId, className }: Props) {
   }
 
   return (
-    <section className='mt-4 w-full'>
+    <section className={cn('mt-4 w-full', className)}>
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <div className='w-full flex justify-between items-center'>
           <Header1>Atividades</Header1>
@@ -88,7 +89,11 @@ export default function ActivitiesSection({ tripId, className }: Props) {
         </div>
         <div className='space-y-4'>
           {activities?.map((dayActivity) => (
-            <DaySection key={dayActivity.date.toString()} dayActivity={dayActivity} />
+            <DaySection
+              key={dayActivity.date.toString()}
+              dayActivity={dayActivity}
+              tripId={tripId}
+            />
           ))}
         </div>
 

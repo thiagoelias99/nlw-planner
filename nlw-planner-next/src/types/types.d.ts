@@ -1,3 +1,5 @@
+import { boolean } from 'zod'
+
 declare type User = {
   id: string
   firstName: string
@@ -51,4 +53,5 @@ declare type Activity = {
   id: string
   title: string
   date: Date
+  checked: boolean
 }
