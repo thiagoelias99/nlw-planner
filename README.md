@@ -74,7 +74,7 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 #### Create Activities
 - [X] Activity schema
 - [X] Activity form
-- [ ] Save activity
+- [X] Save activity
 - [ ] List activities
 - [ ] Check / uncheck activity
 - [ ] Edit activity

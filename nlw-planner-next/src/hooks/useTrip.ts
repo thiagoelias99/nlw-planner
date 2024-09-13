@@ -1,3 +1,4 @@
+import { registerActivityAction } from '@/actions/activity/register-activity-action'
 import { registerLinkAction } from '@/actions/links/register-link-action'
 import { getTrip } from '@/actions/trip/get-trip'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -13,8 +14,9 @@ const useTrip = (tripId: string) => {
     }
   })
 
+  //Register new link
   const { mutateAsync: registerLink, isPending: isRegisteringLink } = useMutation({
-    mutationKey: ['updateTrip', tripId],
+    mutationKey: ['registerLink', tripId],
     mutationFn: async (data: {
       title: string,
       url: string
@@ -25,7 +27,20 @@ const useTrip = (tripId: string) => {
     }
   })
 
-  return { trip, registerLink, isRegisteringLink }
+  //Register new activity
+  const { mutateAsync: registerActivity, isPending: isRegisteringActivity } = useMutation({
+    mutationKey: ['registerActivity', tripId],
+    mutationFn: async (data: {
+      title: string,
+      dateTime: Date
+    }) => {
+      await registerActivityAction({ ...data, tripId })
+
+      await queryClient.invalidateQueries({ queryKey: ['trip', tripId] })
+    }
+  })
+
+  return { trip, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity }
 }
 
 export { useTrip }

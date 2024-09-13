@@ -36,7 +36,7 @@ export default function TripDetailsContents({ tripId }: { tripId: string }) {
         onSubmit={onSubmit}
       />
       <LinksSection tripId={tripId} className='mt-4' />
-      <ActivitiesSection />
+      <ActivitiesSection tripId={tripId} />
     </div>
   )
 }

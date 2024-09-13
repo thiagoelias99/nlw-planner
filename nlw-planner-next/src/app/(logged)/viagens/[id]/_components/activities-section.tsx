@@ -20,7 +20,6 @@ import {
   Form,
   FormControl,
   FormField,
-  FormItem,
   FormMessage,
 } from '@/components/ui/form'
 import CustomFormItem from '@/components/ui/custom-form-item'
@@ -28,16 +27,27 @@ import InputWithLeadingIcon from '@/components/form-fields/Input-with-leading-ic
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { format } from 'date-fns'
 import { Calendar } from '@/components/ui/calendar'
-import { cn } from '@/lib/utils'
 import { ptBR } from 'date-fns/locale'
+import { useTrip } from '@/hooks/useTrip'
+import { useState } from 'react'
+import { useToast } from '@/components/ui/use-toast'
+import { ClassNameValue } from 'tailwind-merge'
 
-export default function ActivitiesSection() {
+interface Props {
+  tripId: string
+  className?: ClassNameValue
+}
+
+export default function ActivitiesSection({ tripId, className }: Props) {
   const formSchema = z.object({
     title: z.string().min(1).max(50),
     date: z.date(),
     time: z.string(),
   })
 
+  const [openDialog, setOpenDialog] = useState(false)
+  const { toast } = useToast()
+  const { registerActivity, isRegisteringActivity } = useTrip(tripId)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,15 +57,27 @@ export default function ActivitiesSection() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+
+      const date = format(values.date, 'yyyy-MM-dd')
+      const dateTime = new Date(`${date}T${values.time}:00`)
+
+      await registerActivity({ title: values.title, dateTime })
+      form.reset()
+      setOpenDialog(false)
+    } catch (error) {
+      console.error(error)
+      toast({
+        title: 'Erro ao cadastrar atividade',
+        variant: 'destructive',
+      })
+    }
   }
 
   return (
     <section className='mt-4 w-full'>
-      <Dialog>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <div className='w-full flex justify-between items-center'>
           <Header1>Atividades</Header1>
           <DialogTrigger asChild>
@@ -141,7 +163,11 @@ export default function ActivitiesSection() {
                   )}
                 />
               </div>
-              <Button className='w-full' type="submit">Salvar atividade</Button>
+              <Button
+                className='w-full'
+                type="submit"
+                isLoading={isRegisteringActivity}
+              >Salvar atividade</Button>
             </form>
           </Form>
 
