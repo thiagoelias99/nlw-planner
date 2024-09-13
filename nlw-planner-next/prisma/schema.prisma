@@ -42,9 +42,10 @@ model Trip {
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @default(now()) @updatedAt @map("updated_at")
 
-  User    User      @relation(fields: [ownerEmail], references: [email], onUpdate: Cascade, onDelete: Cascade)
-  Invites Invites[]
-  Links   Links[]
+  User     User       @relation(fields: [ownerEmail], references: [email], onUpdate: Cascade, onDelete: Cascade)
+  Invites  Invites[]
+  Links    Links[]
+  Activity Activity[]
 
   @@index([ownerEmail])
   @@map("trips")
@@ -88,4 +89,18 @@ model Links {
 
   @@index([tripId])
   @@map("links")
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  tripId    String   @map("trip_id")
+  title     String
+  date      DateTime
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  Trip Trip @relation(fields: [tripId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@index([tripId])
+  @@map("activities")
 }

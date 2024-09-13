@@ -72,9 +72,9 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [ ] Delete Links
 
 #### Create Activities
-- [ ] Activity schema
-- [ ] Create activity endpoint
-- [ ] Activity form
+- [X] Activity schema
+- [X] Activity form
+- [ ] Save activity
 - [ ] List activities
 - [ ] Check / uncheck activity
 - [ ] Edit activity
