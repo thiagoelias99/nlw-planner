@@ -28,7 +28,7 @@ export default function TripDetailsContents({ tripId }: { tripId: string }) {
   }
 
   return (
-    <div className='p-4 space-y-8'>
+    <div className='p-4 space-y-8 w-full max-w-screen-lg mx-auto'>
       {isLoadingTrip || isLoadingActivities ? (
         <div className='w-full h-full flex flex-col justify-center items-center'>
           <Loader2Icon className='animate-spin text-primary size-12' />
@@ -43,9 +43,13 @@ export default function TripDetailsContents({ tripId }: { tripId: string }) {
             }}
             onSubmit={onSubmit}
           />
-          <LinksSection tripId={tripId} />
-          <GuestsSection tripId={tripId} />
-          <ActivitiesSection tripId={tripId} />
+          <div className='w-full space-y-8 sm:flex flex-row-reverse justify-between gap-8'>
+            <div className='contents sm:w-full sm:flex flex-col flex-1'>
+              <LinksSection tripId={tripId} className='' />
+              <GuestsSection tripId={tripId} className='' />
+            </div>
+            <ActivitiesSection tripId={tripId} className='flex-[2]' />
+          </div>
         </>
       )}
 

@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { useTrip } from '@/hooks/useTrip'
 import { AtSignIcon, CircleCheckIcon, CircleDashedIcon, PlusIcon, UserIcon } from 'lucide-react'
 import { InviteStatus } from '.prisma/client'
+import { useMediaQuery } from '@reactuses/core'
 
 import {
   Dialog,
@@ -61,6 +62,8 @@ export default function GuestsSection({ tripId, className }: Props) {
     },
   })
 
+  const isGreaterThanSm = useMediaQuery('(min-width: 640px)')
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await inviteGuest(values)
@@ -81,7 +84,7 @@ export default function GuestsSection({ tripId, className }: Props) {
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
 
-        <Accordion type="single" collapsible>
+        <Accordion type="single" collapsible defaultValue={isGreaterThanSm ? 'item-1' : ''}>
           <AccordionItem value="item-1">
             <AccordionTrigger>
               <h2 className='text-xl font-bold'>Convidados ({trip?.Invites.length})</h2>

@@ -53,7 +53,7 @@ export default async function Viagens() {
       <Header1 className='text-2xl font-bold'>Minhas Viagens</Header1>
 
       {(ownedTrips && invitedTrips) ? (
-        <div className='w-full mt-4 flex flex-col gap-4'>
+        <div className='w-full mt-4 flex flex-col gap-4 max-w-screen-sm mx-auto'>
           {ownedTrips.map(trip => {
             return (
               <Link

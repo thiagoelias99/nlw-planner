@@ -16,9 +16,10 @@ import InputWithLeadingIcon from '@/components/form-fields/Input-with-leading-ic
 import CustomFormItem from '@/components/ui/custom-form-item'
 import { useTrip } from '@/hooks/useTrip'
 import { useToast } from '@/components/ui/use-toast'
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ClassNameValue } from 'tailwind-merge'
 import { cn } from '@/lib/utils'
+import { useMediaQuery } from '@reactuses/core'
 
 import {
   Accordion,
@@ -43,6 +44,8 @@ export default function LinksSection({ tripId, className }: Props) {
     title: z.string().min(2).max(50),
     url: z.string().url(),
   })
+
+  const isGreaterThanSm = useMediaQuery('(min-width: 640px)')
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -111,7 +114,7 @@ export default function LinksSection({ tripId, className }: Props) {
     <section className={cn('w-full space-y-2', className)}>
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
 
-        <Accordion type="single" collapsible>
+        <Accordion type="single" defaultValue={isGreaterThanSm ? 'item-1' : ''} collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>
               <h2 className='text-xl font-bold'>Links Importantes ({trip?.Links.length})</h2>

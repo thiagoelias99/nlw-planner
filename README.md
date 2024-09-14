@@ -100,8 +100,8 @@ I decided to implement using NextJs as web front-end and back-end; and React Nat
 #### Other
 - [ ] Deploy Next
 - [X] Loadings
-- [ ] Desktop UI
-- [ ] Tablet UI
+- [X] Desktop UI
+- [X] Tablet UI
 - [ ] Improve email template
 
 #### Api
