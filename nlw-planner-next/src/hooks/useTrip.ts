@@ -4,9 +4,12 @@ import { getActivitiesFromTripAction } from '@/actions/activity/get-activities-f
 import { registerActivityAction } from '@/actions/activity/register-activity-action'
 import { updateActivityAction } from '@/actions/activity/update-activity'
 import { inviteGuestAction } from '@/actions/guest/invite-guest'
+import { deleteLinkAction } from '@/actions/links/delete-link'
 import { registerLinkAction } from '@/actions/links/register-link-action'
+import { updateLinksAction } from '@/actions/links/update-link'
 import { getTrip } from '@/actions/trip/get-trip'
 import { Activity } from '@/types/types'
+import { Links } from '@prisma/client'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const useTrip = (tripId: string) => {
@@ -29,6 +32,26 @@ const useTrip = (tripId: string) => {
       url: string
     }) => {
       await registerLinkAction({ ...data, tripId })
+
+      await queryClient.invalidateQueries({ queryKey: ['trip', tripId] })
+    }
+  })
+
+  //Update link
+  const { mutateAsync: updateLink, isPending: isUpdatingLink } = useMutation({
+    mutationKey: ['updateLink', tripId],
+    mutationFn: async (data: Links) => {
+      await updateLinksAction(data)
+
+      await queryClient.invalidateQueries({ queryKey: ['trip', tripId] })
+    }
+  })
+
+  //Delete link
+  const { mutateAsync: deleteLink, isPending: isDeletingLink } = useMutation({
+    mutationKey: ['deleteLink', tripId],
+    mutationFn: async (data: { linkId: string }) => {
+      await deleteLinkAction(data)
 
       await queryClient.invalidateQueries({ queryKey: ['trip', tripId] })
     }
@@ -68,7 +91,7 @@ const useTrip = (tripId: string) => {
     }
   })
 
-  //Check activity
+  //Update activity
   const { mutateAsync: updateActivity, isPending: isUpdatingActivity } = useMutation({
     mutationKey: ['updateActivity', tripId],
     mutationFn: async (data: Activity) => {
@@ -81,7 +104,7 @@ const useTrip = (tripId: string) => {
   //Delete activity
   const { mutateAsync: deleteActivity, isPending: isDeletingActivity } = useMutation({
     mutationKey: ['deleteActivity', tripId],
-    mutationFn: async (data: {activityId: string}) => {
+    mutationFn: async (data: { activityId: string }) => {
       await deleteActivityAction(data)
 
       await queryClient.invalidateQueries({ queryKey: ['tripActivities', tripId] })
@@ -101,7 +124,7 @@ const useTrip = (tripId: string) => {
     }
   })
 
-  return { trip, activities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity, checkActivity, isCheckingActivity, updateActivity, isUpdatingActivity, deleteActivity, isDeletingActivity, inviteGuest, isInvitingGuest }
+  return { trip, activities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity, checkActivity, isCheckingActivity, updateActivity, isUpdatingActivity, deleteActivity, isDeletingActivity, inviteGuest, isInvitingGuest, deleteLink, isDeletingLink, updateLink, isUpdatingLink }
 }
 
 export { useTrip }

@@ -35,7 +35,7 @@
 
 ### Introduction
 This app was proposed in a NLW event from [RocketSeat](https://www.rocketseat.com.br/) and its objective is to develop an application where a user can create a trip, invite guest and manage activities.   
-I decided to implement using NextJs as web front end and backend; and React Native Expo for a mobile version.
+I decided to implement using NextJs as web front-end and back-end; and React Native Expo for a mobile version.
 
 ### User Interface
 - [Figma](https://www.figma.com/design/mPYb3uPd3Tv6ebsqeJ3GoZ/NLW-Journey-%E2%80%A2-Planejador-de-viagem-(Community)?node-id=0-1&t=Sd8vCzrR7iUMR9U7-0)
@@ -44,10 +44,8 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - NextJs for web front end and back end.
   - Tailwind UI + Shadcn UI for interfaces.
   - Mobile first ui development.
-  - Axios + React Query for HTTP client.
+  - React Query for data fetch.
   - React Hook Form for inputs.
-  - Built in api router.
-- Firebase + Firestore for database.
 
 ### ROADMAP
 #### Create Trip
@@ -70,7 +68,7 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [X] Link form
 - [X] List links
 - [X] Navigate to link
-- [ ] Delete Links
+- [X] Delete Links
 - [X] Collapse in SM
 
 #### Create Activities
@@ -85,4 +83,13 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 #### Manage Guests
 - [X] List guest
 - [X] Invite guest
-- [ ] Remove guest
+- [ ] Manage guests
+
+#### Other
+- [ ] Loadings
+- [ ] Desktop UI
+- [ ] Tablet UI
+
+#### Api
+- [ ] Configure server
+- [ ] Configure routes
