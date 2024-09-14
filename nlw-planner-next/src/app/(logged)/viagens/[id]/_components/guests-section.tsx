@@ -84,9 +84,12 @@ export default function GuestsSection({ tripId, className }: Props) {
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>
-              <h2 className='text-xl font-bold'>Convidados</h2>
+              <h2 className='text-xl font-bold'>Convidados ({trip?.Invites.length})</h2>
             </AccordionTrigger>
             <AccordionContent>
+              {trip?.Invites.length === 0 && (
+                <p className='text-muted-foreground'>Nenhum convidado adicionado.</p>
+              )}
               <ul className='w-full space-y-2'>
                 {trip?.Invites.map(invite => {
                   return (

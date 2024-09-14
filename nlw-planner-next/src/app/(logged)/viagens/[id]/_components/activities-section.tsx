@@ -149,6 +149,9 @@ export default function ActivitiesSection({ tripId, className }: Props) {
           </DialogTrigger>
         </div>
         <div className='space-y-4'>
+          {activities?.length === 0 && (
+            <p className='text-muted-foreground'>Nenhuma atividade cadastrada.</p>
+          )}
           {activities?.map((dayActivity) => (
             <DaySection
               key={dayActivity.date.toString()}

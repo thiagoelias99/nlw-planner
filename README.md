@@ -63,8 +63,8 @@ I decided to implement using NextJs as web front-end and back-end; and React Nat
 - [X] Auto create if logged
 
 #### Trips
-- [ ] List owned trips
-- [ ] List invited trips
+- [X] List owned trips
+- [X] List invited trips
 - [ ] Order by date
 - [ ] Group concluded
 - [ ] Delete trip
@@ -78,7 +78,7 @@ I decided to implement using NextJs as web front-end and back-end; and React Nat
 - [X] Navigate to link
 - [X] Delete Links
 - [X] Collapse in SM
-- [ ] Empty message
+- [X] Empty message
 
 #### Create Activities
 - [X] Activity schema
@@ -89,13 +89,13 @@ I decided to implement using NextJs as web front-end and back-end; and React Nat
 - [X] Edit activity
 - [X] Delete activity
 - [ ] Show activities out-of-date
-- [ ] Empty message
+- [X] Empty message
 
 #### Manage Guests
 - [X] List guest
 - [X] Invite guest
 - [ ] Manage guests
-- [ ] Empty message
+- [X] Empty message
 
 #### Other
 - [ ] Deploy Next

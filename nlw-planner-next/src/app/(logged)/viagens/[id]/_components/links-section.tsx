@@ -114,9 +114,12 @@ export default function LinksSection({ tripId, className }: Props) {
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
             <AccordionTrigger>
-              <h2 className='text-xl font-bold'>Links Importantes</h2>
+              <h2 className='text-xl font-bold'>Links Importantes ({trip?.Links.length})</h2>
             </AccordionTrigger>
             <AccordionContent>
+              {trip?.Links.length === 0 && (
+                <p className='text-muted-foreground'>Nenhum link cadastrado</p>
+              )}
               <ul className='w-full space-y-2'>
                 {trip?.Links.map(link => {
                   return (
