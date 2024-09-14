@@ -22,9 +22,10 @@ interface GuestEmailsInputProps {
   onSubmit: (values: GuestEmailsInputFormValues[]) => void
   guestsEmails: GuestEmailsInputFormValues[]
   confirmAction: () => void
+  isSubmitting: boolean
 }
 
-export default function GuestsEmailsInput({ onSubmit: parentOnSubmit, guestsEmails, confirmAction }: GuestEmailsInputProps) {
+export default function GuestsEmailsInput({ onSubmit: parentOnSubmit, guestsEmails, confirmAction, isSubmitting }: GuestEmailsInputProps) {
   const [guestEmails, setGuestEmails] = useState<GuestEmailsInputFormValues[]>(guestsEmails)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,6 +71,7 @@ export default function GuestsEmailsInput({ onSubmit: parentOnSubmit, guestsEmai
           <Button
             type='button'
             onClick={confirmAction}
+            isLoading={isSubmitting}
           >
             <span>Confirmar Viagem</span>
             <ArrowRightIcon size={18} />

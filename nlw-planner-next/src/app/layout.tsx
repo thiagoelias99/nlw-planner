@@ -7,6 +7,7 @@ import LoginHeader from '@/components/login-header'
 import { auth } from '@/auth'
 import { getMailClient } from '@/infra/mailer'
 import Providers from './providers'
+import { SessionProvider } from 'next-auth/react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,16 +25,18 @@ export default async function RootLayout({
 
   return (
     <html lang="pt-BR" className='dark'>
-      <Providers>
-        <body className={cn('min-h-screen bg-background font-sans antialiased', inter.className)}
-        >
-          <div>
-            <LoginHeader session={session} />
-            {children}
-            <Toaster />
-          </div>
-        </body>
-      </Providers>
+      <SessionProvider session={session}>
+        <Providers>
+          <body className={cn('min-h-screen bg-background font-sans antialiased', inter.className)}
+          >
+            <div>
+              <LoginHeader session={session} />
+              {children}
+              <Toaster />
+            </div>
+          </body>
+        </Providers>
+      </SessionProvider>
     </html>
   )
 }

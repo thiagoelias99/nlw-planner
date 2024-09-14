@@ -8,9 +8,11 @@ import OwnerEmailInput, { OwnerEmailInputFormValues } from '../form-fields/owner
 import { useRouter } from 'next/navigation'
 import { useToast } from '../ui/use-toast'
 import { TripServices } from '@/services/trip-services'
+import { useSession } from 'next-auth/react'
 
 export default function CreateTripForm() {
   const tripServices = TripServices.getInstance()
+  const { data: session } = useSession()
 
   const [createTripDto, setCreateTripDto] = useState<CreateTripDto>({
     ownerEmail: '',
@@ -63,6 +65,34 @@ export default function CreateTripForm() {
         title: 'Viagem criada com sucesso!',
         description: 'Verifique seu email para continuar',
       })
+      router.push('/entrar?email=' + data.email)
+    }
+  }
+
+  async function handleConfirm() {
+    if (session?.user.email) {
+
+      const completeData = {
+        ...createTripDto,
+        ownerEmail: session?.user.email,
+      }
+
+      setCreateTripDto(completeData)
+
+      setIsSubmitting(true)
+
+      await tripServices.createTrip(completeData)
+
+      toast({
+        title: 'Viagem criada com sucesso!',
+        description: 'Verifique seu email para continuar',
+      })
+
+      router.push('/viagens')
+  
+      setIsSubmitting(false)
+    } else {
+      setOpenOwnerEmailInput(true)
     }
   }
 
@@ -77,7 +107,8 @@ export default function CreateTripForm() {
         <GuestsEmailsInput
           onSubmit={step2Submit}
           guestsEmails={createTripDto.guestsEmails}
-          confirmAction={() => setOpenOwnerEmailInput(true)}
+          confirmAction={handleConfirm}
+          isSubmitting={isSubmitting}
         />
       )}
       <OwnerEmailInput
