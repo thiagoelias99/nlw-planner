@@ -17,7 +17,7 @@ const useTrip = (tripId: string) => {
   const queryClient = useQueryClient()
 
   //Get trip data
-  const { data: trip } = useQuery({
+  const { data: trip, isLoading: isLoadingTrip } = useQuery({
     queryKey: ['trip', tripId],
     queryFn: async () => {
       return getTrip(tripId)
@@ -71,7 +71,7 @@ const useTrip = (tripId: string) => {
   })
 
   //Get activities
-  const { data: activities } = useQuery({
+  const { data: activities, isLoading: isLoadingActivities } = useQuery({
     queryKey: ['tripActivities', tripId],
     queryFn: async () => {
       return getActivitiesFromTripAction(tripId)
@@ -124,7 +124,7 @@ const useTrip = (tripId: string) => {
     }
   })
 
-  return { trip, activities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity, checkActivity, isCheckingActivity, updateActivity, isUpdatingActivity, deleteActivity, isDeletingActivity, inviteGuest, isInvitingGuest, deleteLink, isDeletingLink, updateLink, isUpdatingLink }
+  return { trip, isLoadingTrip, activities, isLoadingActivities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity, checkActivity, isCheckingActivity, updateActivity, isUpdatingActivity, deleteActivity, isDeletingActivity, inviteGuest, isInvitingGuest, deleteLink, isDeletingLink, updateLink, isUpdatingLink }
 }
 
 export { useTrip }
