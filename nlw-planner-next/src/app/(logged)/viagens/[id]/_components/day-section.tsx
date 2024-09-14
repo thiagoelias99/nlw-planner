@@ -4,15 +4,16 @@ import DayItem from './day-item'
 import { ClassNameValue } from 'tailwind-merge'
 import { format, isPast, isToday } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { DayActivity } from '@/types/types'
+import { Activity, DayActivity } from '@/types/types'
 
 interface Props {
   tripId: string
   dayActivity: DayActivity
+  setSelectedActivity: (activity: Activity | null) => void
   className?: ClassNameValue
 }
 
-export default function DaySection({ dayActivity, className, tripId }: Props) {
+export default function DaySection({ dayActivity, className, tripId, setSelectedActivity }: Props) {
   const date = new Date(dayActivity.date)
 
   const inThePast = isPast(date) && !isToday(date)
@@ -27,7 +28,12 @@ export default function DaySection({ dayActivity, className, tripId }: Props) {
         <p className='text-muted-foreground'>Nenhuma atividade cadastrada neste dia</p>
       )}
       {dayActivity.activities.map((activity) => (
-        <DayItem key={activity.id} activity={activity} tripId={tripId} />
+        <DayItem
+          key={activity.id}
+          activity={activity}
+          tripId={tripId}
+          setSelectedActivity={setSelectedActivity}
+        />
       ))}
     </div>
   )

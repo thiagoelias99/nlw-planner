@@ -1,6 +1,6 @@
 import Header1 from '@/components/header1'
 import { Button } from '@/components/ui/button'
-import { CalendarIcon, ClockIcon, PlusIcon, TagIcon } from 'lucide-react'
+import { CalendarIcon, ClockIcon, PlusIcon, TagIcon, Trash2Icon } from 'lucide-react'
 import DaySection from './day-section'
 
 import {
@@ -29,10 +29,11 @@ import { format } from 'date-fns'
 import { Calendar } from '@/components/ui/calendar'
 import { ptBR } from 'date-fns/locale'
 import { useTrip } from '@/hooks/useTrip'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { ClassNameValue } from 'tailwind-merge'
 import { cn } from '@/lib/utils'
+import { Activity } from '@/types/types'
 
 interface Props {
   tripId: string
@@ -47,8 +48,9 @@ export default function ActivitiesSection({ tripId, className }: Props) {
   })
 
   const [openDialog, setOpenDialog] = useState(false)
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null)
   const { toast } = useToast()
-  const { trip, activities, registerActivity, isRegisteringActivity } = useTrip(tripId)
+  const { trip, activities, registerActivity, isRegisteringActivity, updateActivity, isUpdatingActivity, deleteActivity, isDeletingActivity } = useTrip(tripId)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,20 +60,75 @@ export default function ActivitiesSection({ tripId, className }: Props) {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const date = format(values.date, 'yyyy-MM-dd')
-      const dateTime = new Date(`${date}T${values.time}:00`)
-
-      await registerActivity({ title: values.title, dateTime })
-      form.reset()
-      setOpenDialog(false)
-    } catch (error) {
-      console.error(error)
-      toast({
-        title: 'Erro ao cadastrar atividade',
-        variant: 'destructive',
+  useEffect(() => {
+    if (selectedActivity) {
+      form.reset({
+        title: selectedActivity.title,
+        date: new Date(selectedActivity.date),
+        time: format(new Date(selectedActivity.date), 'HH:mm')
       })
+      setOpenDialog(true)
+    } else {
+      form.reset({
+        title: '',
+        date: undefined,
+        time: ''
+      })
+    }
+  }, [selectedActivity])
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (selectedActivity) {
+      try {
+        const date = format(values.date, 'yyyy-MM-dd')
+        const dateTime = new Date(`${date}T${values.time}:00`)
+
+        await updateActivity({
+          id: selectedActivity.id,
+          title: values.title,
+          date: dateTime,
+          checked: selectedActivity.checked
+        })
+        form.reset()
+        setOpenDialog(false)
+      } catch (error) {
+        console.error(error)
+        toast({
+          title: 'Erro ao cadastrar atividade',
+          variant: 'destructive',
+        })
+      }
+    } else {
+      try {
+        const date = format(values.date, 'yyyy-MM-dd')
+        const dateTime = new Date(`${date}T${values.time}:00`)
+
+        await registerActivity({ title: values.title, dateTime })
+        form.reset()
+        setOpenDialog(false)
+      } catch (error) {
+        console.error(error)
+        toast({
+          title: 'Erro ao cadastrar atividade',
+          variant: 'destructive',
+        })
+      }
+    }
+  }
+
+  async function onDelete() {
+    if (selectedActivity) {
+      try {
+        await deleteActivity({ activityId: selectedActivity.id })
+        form.reset()
+        setOpenDialog(false)
+      } catch (error) {
+        console.error(error)
+        toast({
+          title: 'Erro ao deletar atividade',
+          variant: 'destructive',
+        })
+      }
     }
   }
 
@@ -81,7 +138,11 @@ export default function ActivitiesSection({ tripId, className }: Props) {
         <div className='w-full flex justify-between items-center'>
           <Header1>Atividades</Header1>
           <DialogTrigger asChild>
-            <Button>
+            <Button
+              onClick={() => {
+                setSelectedActivity(null)
+              }}
+            >
               <PlusIcon size={16} />
               <span>Cadastrar atividade</span>
             </Button>
@@ -93,13 +154,25 @@ export default function ActivitiesSection({ tripId, className }: Props) {
               key={dayActivity.date.toString()}
               dayActivity={dayActivity}
               tripId={tripId}
+              setSelectedActivity={setSelectedActivity}
             />
           ))}
         </div>
 
         <DialogContent className='w-full px-2'>
           <DialogHeader>
-            <DialogTitle>Cadastrar atividade</DialogTitle>
+            {selectedActivity && (
+              <Button
+                size='icon'
+                variant='destructive'
+                className='absolute top-2 left-2'
+                onClick={onDelete}
+                isLoading={isDeletingActivity}
+              >
+                <Trash2Icon />
+              </Button>
+            )}
+            <DialogTitle>Atividade</DialogTitle>
             <DialogDescription>
               Todos convidados podem visualizar as atividades.
             </DialogDescription>
@@ -173,7 +246,7 @@ export default function ActivitiesSection({ tripId, className }: Props) {
               <Button
                 className='w-full'
                 type="submit"
-                isLoading={isRegisteringActivity}
+                isLoading={isRegisteringActivity || isUpdatingActivity || isDeletingActivity}
               >Salvar atividade</Button>
             </form>
           </Form>

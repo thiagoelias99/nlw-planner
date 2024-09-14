@@ -1,9 +1,12 @@
 import { checkActivityAction } from '@/actions/activity/check-activity'
+import { deleteActivityAction } from '@/actions/activity/delete-activity'
 import { getActivitiesFromTripAction } from '@/actions/activity/get-activities-from-trip'
 import { registerActivityAction } from '@/actions/activity/register-activity-action'
+import { updateActivityAction } from '@/actions/activity/update-activity'
 import { inviteGuestAction } from '@/actions/guest/invite-guest'
 import { registerLinkAction } from '@/actions/links/register-link-action'
 import { getTrip } from '@/actions/trip/get-trip'
+import { Activity } from '@/types/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const useTrip = (tripId: string) => {
@@ -65,6 +68,26 @@ const useTrip = (tripId: string) => {
     }
   })
 
+  //Check activity
+  const { mutateAsync: updateActivity, isPending: isUpdatingActivity } = useMutation({
+    mutationKey: ['updateActivity', tripId],
+    mutationFn: async (data: Activity) => {
+      await updateActivityAction(data)
+
+      await queryClient.invalidateQueries({ queryKey: ['tripActivities', tripId] })
+    }
+  })
+
+  //Delete activity
+  const { mutateAsync: deleteActivity, isPending: isDeletingActivity } = useMutation({
+    mutationKey: ['deleteActivity', tripId],
+    mutationFn: async (data: {activityId: string}) => {
+      await deleteActivityAction(data)
+
+      await queryClient.invalidateQueries({ queryKey: ['tripActivities', tripId] })
+    }
+  })
+
   //Invite guest
   const { mutateAsync: inviteGuest, isPending: isInvitingGuest } = useMutation({
     mutationKey: ['inviteGuest', tripId],
@@ -78,7 +101,7 @@ const useTrip = (tripId: string) => {
     }
   })
 
-  return { trip, activities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity, checkActivity, isCheckingActivity, inviteGuest, isInvitingGuest }
+  return { trip, activities, registerLink, isRegisteringLink, registerActivity, isRegisteringActivity, checkActivity, isCheckingActivity, updateActivity, isUpdatingActivity, deleteActivity, isDeletingActivity, inviteGuest, isInvitingGuest }
 }
 
 export { useTrip }
