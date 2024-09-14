@@ -65,10 +65,11 @@ I decided to implement using NextJs as web front-end and back-end; and React Nat
 #### Trips
 - [X] List owned trips
 - [X] List invited trips
-- [ ] Order by date
+- [X] Order by date
 - [ ] Group concluded
 - [ ] Delete trip
-- [ ] Guest open trip
+- [X] Guest open trip
+- [ ] Calendar visualization
 
 #### Links
 - [X] Links schema
@@ -102,7 +103,7 @@ I decided to implement using NextJs as web front-end and back-end; and React Nat
 - [X] Loadings
 - [X] Desktop UI
 - [X] Tablet UI
-- [ ] Improve email template
+- [ ] Improve email templates
 
 #### Api
 - [ ] Configure server

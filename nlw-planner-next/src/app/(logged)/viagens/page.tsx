@@ -24,6 +24,9 @@ export default async function Viagens() {
     },
     include: {
       Invites: true
+    },
+    orderBy: {
+      createdAt: 'desc'
     }
   })
 
@@ -105,34 +108,39 @@ export default async function Viagens() {
           })}
           {invitedTrips.map(invite => {
             return (
-              <Card key={invite.Trip.id}>
-                <CardHeader className='w-full pt-0.5 pb-3'>
-                  <div className='w-full flex justify-between items-start'>
-                    <div className='w-full flex justify-start items-baseline gap-0.5'>
-                      <p className='text-sm'>{mapInviteStatus(invite.inviteStatus)}</p>
+              <Link
+                key={invite.Trip.id}
+                href={`/viagens/${invite.Trip.id}`}
+              >
+                <Card className='hover:opacity-70 cursor-pointer'>
+                  <CardHeader className='w-full pt-0.5 pb-3'>
+                    <div className='w-full flex justify-between items-start'>
+                      <div className='w-full flex justify-start items-baseline gap-0.5'>
+                        <p className='text-sm'>{mapInviteStatus(invite.inviteStatus)}</p>
+                      </div>
+                      <InviteDropDown
+                        invite={invite}
+                      />
                     </div>
-                    <InviteDropDown
-                      invite={invite}
-                    />
-                  </div>
 
-                  <div className='flex flex-row items-baseline justify-start gap-2'>
-                    <MapPinIcon className='h-full' />
-                    <CardTitle className='p-0 m-0'>{invite.Trip.destination}</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className='flex flex-col justify-start items-start gap-1 pb-2'>
-                  <CardItem
-                    Icon={CalendarIcon}
-                    value={describeDateRange(invite.Trip.startDate, invite.Trip.endDate)}
-                  />
-                  <CardItem
-                    Icon={UserCheck2Icon}
-                    label='Criado por'
-                    value={`${invite.Trip.User.firstName} ${invite.Trip.User.lastName}` || ''}
-                  />
-                </CardContent>
-              </Card>
+                    <div className='flex flex-row items-baseline justify-start gap-2'>
+                      <MapPinIcon className='h-full' />
+                      <CardTitle className='p-0 m-0'>{invite.Trip.destination}</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className='flex flex-col justify-start items-start gap-1 pb-2'>
+                    <CardItem
+                      Icon={CalendarIcon}
+                      value={describeDateRange(invite.Trip.startDate, invite.Trip.endDate)}
+                    />
+                    <CardItem
+                      Icon={UserCheck2Icon}
+                      label='Criado por'
+                      value={`${invite.Trip.User.firstName} ${invite.Trip.User.lastName}` || ''}
+                    />
+                  </CardContent>
+                </Card>
+              </Link>
             )
           })}
         </div>

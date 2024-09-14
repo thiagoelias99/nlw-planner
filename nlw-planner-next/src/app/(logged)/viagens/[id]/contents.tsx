@@ -9,13 +9,16 @@ import LinksSection from './_components/links-section'
 import { useTrip } from '@/hooks/useTrip'
 import GuestsSection from './_components/guests-section'
 import { Loader2Icon } from 'lucide-react'
+import { useState } from 'react'
 
 export default function TripDetailsContents({ tripId }: { tripId: string }) {
   const router = useRouter()
   const { toast } = useToast()
   const { trip, isLoadingTrip, isLoadingActivities } = useTrip(tripId)
+  const [isLoading, setIsLoading] = useState(false)
 
   async function onSubmit(data: DestinationAndDateInputsFormValues) {
+    setIsLoading(true)
     try {
       await updateTrip(trip?.id || '', { destination: data.destination, startDate: data.startAt, endDate: data.endsAt })
       router.refresh()
@@ -24,6 +27,8 @@ export default function TripDetailsContents({ tripId }: { tripId: string }) {
       })
     } catch (error) {
 
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -42,6 +47,8 @@ export default function TripDetailsContents({ tripId }: { tripId: string }) {
               endsAt: trip?.endDate,
             }}
             onSubmit={onSubmit}
+            buttonLabel='Atualizar'
+            isLoading={isLoading}
           />
           <div className='w-full space-y-8 sm:flex flex-row-reverse justify-between gap-8'>
             <div className='contents sm:w-full sm:flex flex-col flex-1'>

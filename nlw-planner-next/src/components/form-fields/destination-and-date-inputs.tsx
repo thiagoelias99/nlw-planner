@@ -37,9 +37,11 @@ interface DestinationAndDateInputsProps {
   onSubmit: (values: DestinationAndDateInputsFormValues) => void
   onBack?: () => void
   defaultValues?: Partial<DestinationAndDateInputsFormValues>
+  buttonLabel?: string
+  isLoading?: boolean
 }
 
-export default function DestinationAndDateInputs({ disabled, onSubmit, onBack, defaultValues }: DestinationAndDateInputsProps) {
+export default function DestinationAndDateInputs({ disabled, onSubmit, onBack, defaultValues, buttonLabel = 'Continuar', isLoading }: DestinationAndDateInputsProps) {
   const [date, setDate] = useState<DateRange | undefined>({
     from: defaultValues?.startAt ? new Date(defaultValues.startAt) : undefined,
     to: defaultValues?.endsAt ? new Date(defaultValues.endsAt) : undefined,
@@ -130,9 +132,10 @@ export default function DestinationAndDateInputs({ disabled, onSubmit, onBack, d
           {!disabled ? (
             <Button
               type='submit'
+              isLoading={isLoading}
               className='w-full md:w-auto space-x-2'
             >
-              <span>Continuar</span>
+              <span>{buttonLabel}</span>
               <ArrowRightIcon size={18} />
             </Button>
           ) : (
