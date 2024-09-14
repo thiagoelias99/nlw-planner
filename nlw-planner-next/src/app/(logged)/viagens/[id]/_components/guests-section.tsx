@@ -31,6 +31,13 @@ import InputWithLeadingIcon from '@/components/form-fields/Input-with-leading-ic
 import { useToast } from '@/components/ui/use-toast'
 import { useState } from 'react'
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+
 
 interface Props {
   tripId: string
@@ -73,24 +80,35 @@ export default function GuestsSection({ tripId, className }: Props) {
 
 
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        <h2 className='text-xl font-bold'>Convidados</h2>
-        <ul className='w-full space-y-2'>
-          {trip?.Invites.map(invite => {
-            return (
-              <li className='w-full flex flex-row justify-between' key={invite.id}>
-                <div className='max-w-[80%]'>
-                  <h3 className='text-base font-semibold capitalize'>{`${invite.User.firstName} ${invite.User.lastName}`}</h3>
-                  <p className='text-xs text-muted-foreground line-clamp-1'>{invite.guestEmail}</p>
-                </div>
-                {invite.inviteStatus === InviteStatus.ACCEPTED ? (
-                  <CircleCheckIcon className='text-primary' />
-                ) : (
-                  <CircleDashedIcon className='' />
-                )}
-              </li>
-            )
-          })}
-        </ul>
+
+        <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>
+              <h2 className='text-xl font-bold'>Convidados</h2>
+            </AccordionTrigger>
+            <AccordionContent>
+              <ul className='w-full space-y-2'>
+                {trip?.Invites.map(invite => {
+                  return (
+                    <li className='w-full flex flex-row justify-between' key={invite.id}>
+                      <div className='max-w-[80%]'>
+                        <h3 className='text-base font-semibold capitalize'>{`${invite.User.firstName} ${invite.User.lastName}`}</h3>
+                        <p className='text-xs text-muted-foreground line-clamp-1'>{invite.guestEmail}</p>
+                      </div>
+                      {invite.inviteStatus === InviteStatus.ACCEPTED ? (
+                        <CircleCheckIcon className='text-primary' />
+                      ) : (
+                        <CircleDashedIcon className='' />
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+
 
         <DialogTrigger asChild>
           <Button

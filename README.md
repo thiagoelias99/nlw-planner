@@ -71,7 +71,7 @@ I decided to implement using NextJs as web front end and backend; and React Nati
 - [X] List links
 - [X] Navigate to link
 - [ ] Delete Links
-- [ ] Collapse in SM
+- [X] Collapse in SM
 
 #### Create Activities
 - [X] Activity schema

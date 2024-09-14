@@ -20,6 +20,13 @@ import { useState } from 'react'
 import { ClassNameValue } from 'tailwind-merge'
 import { cn } from '@/lib/utils'
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+
 interface Props {
   tripId: string
   className?: ClassNameValue
@@ -59,24 +66,34 @@ export default function LinksSection({ tripId, className }: Props) {
 
   return (
     <section className={cn('w-full space-y-2', className)}>
-      <h2 className='text-xl font-bold'>Links Importantes</h2>
-      <ul className='w-full space-y-2'>
-        {trip?.Links.map(link => {
-          return (
-            <li className='w-full flex flex-row justify-between' key={link.id}>
-              <div className='max-w-[80%]'>
-                <h3 className='text-base font-semibold'>{link.title}</h3>
-                <p className='text-xs text-muted-foreground line-clamp-1'>{link.url}</p>
-              </div>
-              <Button size='icon' variant='ghost' onClick={
-                () => window.open(link.url, '_blank')
-              }>
-                <Link2Icon />
-              </Button>
-            </li>
-          )
-        })}
-      </ul>
+
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>
+            <h2 className='text-xl font-bold'>Links Importantes</h2>
+          </AccordionTrigger>
+          <AccordionContent>
+            <ul className='w-full space-y-2'>
+              {trip?.Links.map(link => {
+                return (
+                  <li className='w-full flex flex-row justify-between' key={link.id}>
+                    <div className='max-w-[80%]'>
+                      <h3 className='text-base font-semibold'>{link.title}</h3>
+                      <p className='text-xs text-muted-foreground line-clamp-1'>{link.url}</p>
+                    </div>
+                    <Button size='icon' variant='ghost' onClick={
+                      () => window.open(link.url, '_blank')
+                    }>
+                      <Link2Icon />
+                    </Button>
+                  </li>
+                )
+              })}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger asChild>
           <Button
