@@ -1,4 +1,4 @@
-<h1 align="center">NLW - Plann.er - Next</h1> 
+<h1 align="center">NLW - Plann.er (in development)</h1> 
 
 <p align="center">
 <a href="https://nextjs.org/">
@@ -19,36 +19,52 @@
 <a href="https://github.com/colinhacks/zod">
   <img src="https://img.shields.io/badge/ShadCn%20ui-000000?style=for-the-badge&logo=shadcnui"/>
 </a>
-<a href="https://firebase.google.com/">
-  <img src="https://img.shields.io/badge/Firebase-000000?style=for-the-badge&logo=firebase&logoColor=orange" />
-</a>
-<a href="https://firebase.google.com/products/firestore">
-  <img src="https://img.shields.io/badge/Firestore-000000?style=for-the-badge&logo=firebase&logoColor=orange" />
-</a>
 <a href="https://react-query.tanstack.com/">
   <img src="https://img.shields.io/badge/React%20Query-000000?style=for-the-badge&logo=react-query&logoColor=ff4154" />
 </a>
 <a href="https://react-hook-form.com/">
   <img src="https://img.shields.io/badge/React%20Hook%20Form-000000?style=for-the-badge&logo=reacthookform&logoColor=ec5990" />
 </a>
+<a href="https://www.prisma.io/">
+<img src="https://img.shields.io/badge/Prisma-000000?style=for-the-badge&logo=prisma" />
+</a>
+<a href="https://www.postgresql.org/">
+  <img src="https://img.shields.io/badge/PostgreSQL-000000?style=for-the-badge&logo=postgresql&logoColor=336791" />
+</a>
 </p>
 
-### Introduction
+<p align="center">
+<img src="./docs/cover.png" width="720px"/>
+</p>
+
+### **Introduction**
 This app was proposed in a NLW event from [RocketSeat](https://www.rocketseat.com.br/) and its objective is to develop an application where a user can create a trip, invite guest and manage activities.   
 I decided to implement using NextJs as web front-end and back-end; and React Native Expo for a mobile version.
 
-### User Interface
+### **User Interface**
 - [Figma](https://www.figma.com/design/mPYb3uPd3Tv6ebsqeJ3GoZ/NLW-Journey-%E2%80%A2-Planejador-de-viagem-(Community)?node-id=0-1&t=Sd8vCzrR7iUMR9U7-0)
 
-### Main Stack
+### **Main Stack**
 - NextJs for web front end and back end.
   - Tailwind UI + Shadcn UI for interfaces.
   - Mobile first ui development.
   - React Query for data fetch.
   - React Hook Form for inputs.
 
-### ROADMAP
-#### Create Trip
+### **Gallery**
+<p align="center">
+<img src="./docs/home.png" width="280px"/>
+<img src="./docs/registro.png" width="280px"/>
+<img src="./docs/token.png" width="280px"/>
+</p>
+<p align="center">
+<img src="./docs/details sm.png" width="280px"/>
+<img src="./docs/details.png" width="720px"/>
+</p>
+
+
+### **ROADMAP**
+#### **Create Trip**
 - [X] Trip schema
 - [X] Create trip schema
 - [X] Create trip endpoint
@@ -62,7 +78,7 @@ I decided to implement using NextJs as web front-end and back-end; and React Nat
 - [X] Redirect to trip details
 - [X] Auto create if logged
 
-#### Trips
+#### **Trips**
 - [X] List owned trips
 - [X] List invited trips
 - [X] Order by date
@@ -71,7 +87,7 @@ I decided to implement using NextJs as web front-end and back-end; and React Nat
 - [X] Guest open trip
 - [ ] Calendar visualization
 
-#### Links
+#### **Links**
 - [X] Links schema
 - [X] Create link endpoint
 - [X] Link form
@@ -81,7 +97,7 @@ I decided to implement using NextJs as web front-end and back-end; and React Nat
 - [X] Collapse in SM
 - [X] Empty message
 
-#### Create Activities
+#### **Create Activities**
 - [X] Activity schema
 - [X] Activity form
 - [X] Save activity
@@ -92,19 +108,19 @@ I decided to implement using NextJs as web front-end and back-end; and React Nat
 - [ ] Show activities out-of-date
 - [X] Empty message
 
-#### Manage Guests
+#### **Manage Guests**
 - [X] List guest
 - [X] Invite guest
 - [ ] Manage guests
 - [X] Empty message
 
-#### Other
+#### **Other**
 - [ ] Deploy Next
 - [X] Loadings
 - [X] Desktop UI
 - [X] Tablet UI
 - [ ] Improve email templates
 
-#### Api
+#### **Api**
 - [ ] Configure server
 - [ ] Configure routes
