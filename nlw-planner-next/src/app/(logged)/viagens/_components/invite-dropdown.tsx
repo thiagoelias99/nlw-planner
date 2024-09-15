@@ -11,18 +11,20 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 interface TripDropDownProps {
-  invite: Invites
+  inviteId: string | undefined | null
 }
 
-export default function InviteDropDown({ invite }: TripDropDownProps) {
+export default function InviteDropDown({ inviteId }: TripDropDownProps) {
   const { toast } = useToast()
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   async function handleConfirmButton() {
     setIsSubmitting(true)
+    if (!inviteId) return
+
     try {
-      await setInviteStatus(invite.id, InviteStatus.ACCEPTED)
+      await setInviteStatus(inviteId, InviteStatus.ACCEPTED)
       toast({
         title: 'Presença confirmada',
       })
@@ -41,8 +43,9 @@ export default function InviteDropDown({ invite }: TripDropDownProps) {
 
   async function handleRejectButton() {
     setIsSubmitting(true)
+    if (!inviteId) return
     try {
-      await setInviteStatus(invite.id, InviteStatus.REJECTED)
+      await setInviteStatus(inviteId, InviteStatus.REJECTED)
       toast({
         title: 'Convite rejeitado',
       })
@@ -61,8 +64,9 @@ export default function InviteDropDown({ invite }: TripDropDownProps) {
 
   async function handleExcludeButton() {
     setIsSubmitting(true)
+    if (!inviteId) return
     try {
-      await setInviteStatus(invite.id, InviteStatus.EXCLUDED)
+      await setInviteStatus(inviteId, InviteStatus.EXCLUDED)
       toast({
         title: 'Convite excluído',
       })

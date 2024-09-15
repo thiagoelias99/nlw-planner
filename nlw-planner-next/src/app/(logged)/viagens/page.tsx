@@ -1,7 +1,7 @@
-import { auth } from '@/auth'
+'use client'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import prisma from '@/infra/prisma'
-import { describeDateRange, mapInviteStatus } from '@/lib/utils'
+import { describeDateRange } from '@/lib/utils'
 import { InviteStatus } from '@prisma/client'
 import { CalendarIcon, CheckIcon, Loader2Icon, LucideIcon, MapPinIcon, UserCheck2Icon, Users2Icon } from 'lucide-react'
 import { redirect } from 'next/navigation'
@@ -10,76 +10,70 @@ import TripDropDown from './_components/trip-dropdown'
 import InviteDropDown from './_components/invite-dropdown'
 import Link from 'next/link'
 import Header1 from '@/components/header1'
+import { useSession } from 'next-auth/react'
+import { useTrips } from '@/hooks/useTrips'
 
-export default async function Viagens() {
-  const session = await auth()
+export default function Viagens() {
+
+  const { data: session } = useSession()
+  const { trips, isLoadingTrips } = useTrips(session?.user.email)
 
   if (!session?.user) {
     redirect('/registro')
   }
 
-  const ownedTrips = await prisma.trip.findMany({
-    where: {
-      ownerEmail: session?.user.email || ''
-    },
-    include: {
-      Invites: true
-    },
-    orderBy: {
-      createdAt: 'desc'
-    }
-  })
-
-  const invitedTrips = await prisma.invites.findMany({
-    where: {
-      guestEmail: session?.user.email || '',
-      inviteStatus: {
-        not: InviteStatus.EXCLUDED
-      }
-    },
-    include: {
-      Trip: {
-        include: {
-          User: {
-            select: {
-              firstName: true,
-              lastName: true
-            }
-          }
-        }
-      }
-    }
-  })
-
   return (
     <main className='p-4'>
       <Header1 className='text-2xl font-bold'>Minhas Viagens</Header1>
 
-      {(ownedTrips && invitedTrips) ? (
+      {isLoadingTrips ? (
+        <div className='w-full h-full flex flex-col justify-center items-center'>
+          <Loader2Icon className='animate-spin text-primary size-12' />
+        </div>
+      ) : (
         <div className='w-full mt-4 flex flex-col gap-4 max-w-screen-sm mx-auto'>
-          {ownedTrips.map(trip => {
+          {trips?.map(trip => {
             return (
               <Link
                 key={trip.id}
-                href={`/viagens/${trip.id}`}
+                href={trip.isTripVerified ? `/viagens/${trip.id}` : ''}
+                className={!trip.isTripVerified && trip.User.email !== session.user.email ? 'hidden' : ''}
               >
                 <Card
                   className='hover:opacity-70 cursor-pointer'
                 >
                   <CardHeader className='w-full pt-0.5 pb-3'>
                     <div className='w-full flex justify-between items-start'>
-                      {trip.isTripVerified ? (
+
+                      {!trip.isTripVerified && (
+                        <div className='w-full text-red-600 flex justify-start items-baseline gap-0.5'>
+                          <p className='text-sm'>Aguardando confirmação da viagem</p>
+                        </div>
+                      )}
+
+                      {trip.isTripVerified && trip.User.email === session.user.email && (
                         <div className='w-full text-green-600 flex justify-start items-baseline gap-0.5'>
                           <CheckIcon className='h-6' />
-                          <p className='text-sm'>Confirmado</p>
-                        </div>) : (
-                        <div className='w-full text-red-600 flex justify-start items-baseline gap-0.5'>
-                          <p className='text-sm'>Pendente</p>
-                        </div>)}
-                      <TripDropDown
-                        tripId={trip.id}
-                        tripIsConfirmed={trip.isTripVerified}
-                      />
+                          <p className='text-sm'>Viagem Confirmada</p>
+                        </div>
+                      )}
+
+                      {trip.User.email !== session.user.email && (
+                        <div className='w-full flex justify-start items-baseline gap-0.5'>
+                          <p className='text-sm'>{trip.Invites.find(invite => invite.guestEmail === session.user.email)?.inviteStatus === InviteStatus.ACCEPTED ? 'Presença confirmada' : 'Aguardando confirmação de presença'}</p>
+                        </div>
+                      )}
+
+                      {trip.User.email === session.user.email ? (
+                        <TripDropDown
+                          tripId={trip.id}
+                          tripIsConfirmed={trip.isTripVerified}
+                        />
+                      ) : (
+                        <InviteDropDown
+                          inviteId={trip.Invites.find(invite => invite.guestEmail === session.user.email)?.id}
+                        />
+                      )}
                     </div>
 
                     <div className='flex flex-row items-baseline justify-start gap-2'>
@@ -95,7 +89,7 @@ export default async function Viagens() {
                     <CardItem
                       Icon={UserCheck2Icon}
                       label='Criado por'
-                      value={session.user.name || ''}
+                      value={`${trip.User.firstName} ${trip.User.lastName}`}
                     />
                     <CardItem
                       Icon={Users2Icon}
@@ -106,47 +100,6 @@ export default async function Viagens() {
               </Link>
             )
           })}
-          {invitedTrips.map(invite => {
-            return (
-              <Link
-                key={invite.Trip.id}
-                href={`/viagens/${invite.Trip.id}`}
-              >
-                <Card className='hover:opacity-70 cursor-pointer'>
-                  <CardHeader className='w-full pt-0.5 pb-3'>
-                    <div className='w-full flex justify-between items-start'>
-                      <div className='w-full flex justify-start items-baseline gap-0.5'>
-                        <p className='text-sm'>{mapInviteStatus(invite.inviteStatus)}</p>
-                      </div>
-                      <InviteDropDown
-                        invite={invite}
-                      />
-                    </div>
-
-                    <div className='flex flex-row items-baseline justify-start gap-2'>
-                      <MapPinIcon className='h-full' />
-                      <CardTitle className='p-0 m-0'>{invite.Trip.destination}</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className='flex flex-col justify-start items-start gap-1 pb-2'>
-                    <CardItem
-                      Icon={CalendarIcon}
-                      value={describeDateRange(invite.Trip.startDate, invite.Trip.endDate)}
-                    />
-                    <CardItem
-                      Icon={UserCheck2Icon}
-                      label='Criado por'
-                      value={`${invite.Trip.User.firstName} ${invite.Trip.User.lastName}` || ''}
-                    />
-                  </CardContent>
-                </Card>
-              </Link>
-            )
-          })}
-        </div>
-      ) : (
-        <div className='w-full h-full flex flex-col justify-center items-center'>
-          <Loader2Icon className='animate-spin text-primary size-12' />
         </div>
       )}
     </main>
