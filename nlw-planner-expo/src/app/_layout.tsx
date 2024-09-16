@@ -19,7 +19,7 @@ export default function Layout() {
     Inter_700Bold
   })
 
-  if (fontsLoaded) {
+  if (!fontsLoaded) {
     return (
       <Loading />
     )
