@@ -1,7 +1,7 @@
 import { Image, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Input } from '@/components/input'
-import { MapPinIcon, CalendarIcon, Settings2Icon } from 'lucide-react-native'
+import { MapPinIcon, CalendarIcon, Settings2Icon, UserRoundPlusIcon, ArrowRightIcon } from 'lucide-react-native'
 import { colors } from '@/styles/colors'
 import { Button } from '@/components/button'
 
@@ -31,14 +31,33 @@ export default function Index() {
 
         <View className="border-b py-3 border-zinc-800">
           <Button
-            variant="primary"
-          // onPress={() => setStepForm(StepForm.TRIP_DETAILS)}
+            variant="secondary"
           >
             <Button.Title>Alterar local/data</Button.Title>
             <Settings2Icon color={colors.lime[950]} size={20} />
           </Button>
         </View>
+
+        <Input>
+          <UserRoundPlusIcon color={colors.zinc[400]} size={20} />
+          <Input.Field placeholder='Quem estará na viagem?' />
+        </Input>
+
+        <Button
+          variant="primary"
+        >
+          <Button.Title>Continuar</Button.Title>
+          <ArrowRightIcon color={colors.lime[950]} size={20} />
+        </Button>
       </View>
+
+      <Text className="text-zinc-500 font-regular text-center text-base">
+        Ao planejar sua viagem pela plann.er você automaticamente concorda com
+        nossos{" "}
+        <Text className="text-zinc-300 underline">
+          termos de uso e políticas de privacidade.
+        </Text>
+      </Text>
     </View>
   )
 }
