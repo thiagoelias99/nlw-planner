@@ -4,6 +4,9 @@
 <a href="https://nextjs.org/">
   <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white" />
 </a>
+<a href="https://expo.dev/">
+  <img src="https://img.shields.io/badge/Expo-000000?style=for-the-badge&logo=expo&logoColor=white" />
+</a>
 <a href="https://reactjs.org/">
   <img src="https://img.shields.io/badge/React-000000?style=for-the-badge&logo=react" />
 </a>
@@ -35,6 +38,7 @@
 
 <p align="center">
 <img src="./docs/cover.png" width="720px"/>
+<img src="./docs/expo1.png" width="720px"/>
 </p>
 
 ### **Introduction**
